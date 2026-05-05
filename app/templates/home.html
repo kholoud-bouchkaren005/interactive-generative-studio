@@ -2,9 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="description" content="this is app art">
+    <meta name="keywords" content="HTML,CSS...">
+    <title>interactive_generative</title>
+    <link rel="home" href="app.py" type="home/python page">
 </head>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 <body>
-
+    <h1>hello</h1>
+    <br>
+    <p> Personalisez votre création :</p>
+    <br>
+    <form action="/generate" method="POST">
+        <div class ="shapes control">
+        <label for="shapes">number of shapes </label><br>
+        <input type ="range" id="shapes" name="shapes count" min="10" max="100" value="10" step="10">
+        <span id="valuedisplay">10</span>
+        </div>
+        <br>
+        <div class="size control">
+        <label for="size">size</label><br>
+        <input type="range" id="size" name="size count" min="1" max="10" value="5" step="1">
+        <span id="valuesize">4</span>
+        </div>
+        <br>
+        <div id="contol-color">
+          <label for="fav-color" >choisez votre color</label><br>
+          <input type="color" id="fav-color" name="art-color" value="red">
+            <span id="color">#000000</span>
+        </div><br>
+        <input type="submit" value="Draw My Art">
+    </form>
+<script>
+    const slidershapes= document.getElementById("shapes");
+    const outputshapes= document.getElementById("valuedisplay");
+    slidershapes.oninput=function(){
+        outputshapes.innerHTML=this.value ;
+    }
+</script>
+<script>
+    const slidersize= document.getElementById("size");
+    const outputsize= document.getElementById("valuesize");
+    slidersize.oninput=function(){
+        outputsize.innerHTML=this.value ;
+    }
+</script>
+<script>
+    const colors= document.getElementById("fav-color");
+    const output= document.getElementById("color");
+    colors.oninput=function(){
+        output.innerHTML=this.value;
+        output.style.color=this.value;
+    }
+</script>
 </body>
 </html>
