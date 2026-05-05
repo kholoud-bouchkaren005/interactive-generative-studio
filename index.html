@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBudget | Accueil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar للمسؤول فقط */
+        .navbar {
+            display: flex;
+            justify-content: flex-end;
+            padding: 20px 40px;
+        }
+
+        .btn-admin-hidden {
+            text-decoration: none;
+            color: #7f8c8d;
+            font-size: 0.85rem;
+            padding: 8px 15px;
+            border: 1px solid #bdc3c7;
+            border-radius: 20px;
+            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-admin-hidden:hover {
+            background: #2c3e50;
+            color: #fff;
+            border-color: #2c3e50;
+        }
+
+        /* الجزء الرئيسي */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-bottom: 50px;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        header h1 span {
+            color: #3498db;
+        }
+
+        header p {
+            color: #5d6d7e;
+            margin-bottom: 40px;
+        }
+
+        .selection-container {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .auth-card {
+            background: #fff;
+            padding: 50px 30px;
+            border-radius: 25px;
+            width: 350px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .auth-card:hover {
+            transform: translateY(-10px);
+            border-color: #3498db;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 25px;
+            display: block;
+        }
+
+        .auth-card h2 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .auth-card p {
+            color: #7f8c8d;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            padding: 14px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .btn-citizen { background: #3498db; color: #fff; }
+        .btn-citizen:hover { background: #2980b9; }
+
+        .btn-merchant { background: #2ecc71; color: #fff; }
+        .btn-merchant:hover { background: #27ae60; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="/login-admin" class="btn-admin-hidden">🔐 Administration</a>
+    </nav>
+
+    <div class="main-content">
+        <header>
+            <h1>Smart<span>Budget</span></h1>
+            <p>Plateforme de gestion budgétaire et suivi des prix</p>
+        </header>
+
+        <section class="selection-container">
+            <div class="auth-card">
+                <span class="icon">👤</span>
+                <h2>Citoyen</h2>
+                <p>Gérez votre budget personnel et comparez les prix du marché local.</p>
+                <a href="/login-citoyen" class="btn btn-citizen">Accéder à mon espace</a>
+            </div>
+
+            <div class="auth-card">
+                <span class="icon">🏪</span>
+                <h2>Commerçant</h2>
+                <p>Publiez vos articles, mettez à jour vos tarifs et attirez plus de clients.</p>
+                <a href="/login-commercant" class="btn btn-merchant">Espace Partenaire</a>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>
