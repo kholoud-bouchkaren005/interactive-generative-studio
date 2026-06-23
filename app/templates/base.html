@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Interactive Generative Studio{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="{{ url_for('home') }}" aria-label="Studio home"><span class="brand-dot"></span>Studio</a>
+        <nav class="site-nav" aria-label="Main navigation">
+            <a href="{{ url_for('generative') }}">Forma</a>
+            <a href="{{ url_for('data_art') }}">Pulsar</a>
+            <a href="{{ url_for('image_audio_tools') }}">Lens</a>
+            <a href="{{ url_for('canvas') }}">Canvas</a>
+            <a href="{{ url_for('ml_palette') }}">Chroma</a>
+            <a href="{{ url_for('gallery') }}">Gallery</a>
+        </nav>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer class="site-footer">
+        <p>Interactive Generative Studio - ENSA Tanger - 2025/2026</p>
+        <p>Nihal, Kholoud, Ghizlane</p>
+    </footer>
+
+    {% block scripts %}
+        <script src="{{ url_for('static', filename='main.js') }}"></script>
+    {% endblock %}
+</body>
+</html>
