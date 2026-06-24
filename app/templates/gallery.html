@@ -2,9 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Interactive Generative Studio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body class="studio-page">
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('home') }}">Interactive Generative Studio</a>
+        <nav class="nav-links" aria-label="Main navigation">
+            <a href="{{ url_for('generative') }}">Canvas</a>
+            <a href="{{ url_for('gallery') }}">Gallery</a>
+            <a href="{{ url_for('upload') }}">Upload</a>
+        </nav>
+    </header>
 
+    <main class="gallery-page">
+        <section class="gallery-heading">
+            <p class="eyebrow">Axe 4</p>
+            <h1>Interactive Gallery</h1>
+            <p>Browse sample outputs made with palettes, sliders, generated bursts, and canvas interaction.</p>
+        </section>
+
+        <section class="gallery-grid" aria-label="Artwork thumbnails">
+            <article class="gallery-card aurora-card">
+                <div class="thumb thumb-aurora"></div>
+                <h2>Aurora Burst</h2>
+                <p>Palette selector with animated circles and squares.</p>
+            </article>
+            <article class="gallery-card citrus-card">
+                <div class="thumb thumb-citrus"></div>
+                <h2>Citrus Motion</h2>
+                <p>Slider-driven size changes and click-generated triangles.</p>
+            </article>
+            <article class="gallery-card neon-card">
+                <div class="thumb thumb-neon"></div>
+                <h2>Neon Trace</h2>
+                <p>Drag interaction creates layered lines on the canvas.</p>
+            </article>
+        </section>
+    </main>
 </body>
 </html>

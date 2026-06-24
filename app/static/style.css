@@ -1,65 +1,304 @@
-h1{
-    color:red;
-    text-align:center;
-    margin:0;
-}
-body{
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    width:100vw;
-    height:100vh;
-    margin:0;
-    padding:0;
-    overflow: hidden;
-}
-div{
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px #000000;
-    width: 350px;
-}
-p{
-    margin:0;
-    text-align:center;
-}
-label{
-    color: #000000;
-    display:inline-block;
-    font-family: "Roboto", sans-serif;
-    font-style: italic;
-    text-align:centre;
-}
-input[type="range"], input[type="color"] {
-    width: 200px;
-    padding: 12px;
-    margin: 0;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    box-sizing: border-box;
-    text-align:center;
-    margin:0;
-}
-input[type="submit"] {
-    width: 100%;
-    padding: 12px;
-    background-color: #ddd;
-    border: none;
-    color: #000000;
-    font-weight: bold;
-    border-radius: 6px;
-    transition: background 0.3s;
-    margin: 0 auto;
+:root {
+    --ink: #172026;
+    --muted: #62717a;
+    --paper: #f7f7f4;
+    --panel: #ffffff;
+    --line: #d7dedf;
+    --accent: #2a9d8f;
+    --accent-strong: #e76f51;
+    --shadow: 0 18px 48px rgba(23, 32, 38, 0.14);
 }
 
-input[type="submit"]:hover {
-    background-color: #0056b3;
+* {
+    box-sizing: border-box;
 }
-.shapes.control {
+
+body {
+    margin: 0;
+    color: var(--ink);
+    background: var(--paper);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+select,
+input {
+    font: inherit;
+}
+
+.studio-page {
+    min-height: 100vh;
+}
+
+.topbar {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.88);
+}
+
+.brand {
+    font-weight: 800;
+}
+
+.nav-links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.nav-links a {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 8px 12px;
+    background: #ffffff;
+}
+
+.home-action {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: 8px;
+    color: #ffffff;
+    background: var(--accent);
+    font-weight: 800;
+}
+
+.workspace {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    gap: 22px;
+    padding: 22px;
+    min-height: calc(100vh - 73px);
+}
+
+.tool-panel {
+    align-self: start;
+    display: grid;
+    gap: 18px;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel);
+    box-shadow: var(--shadow);
+}
+
+.panel-heading h1,
+.gallery-heading h1 {
+    margin: 4px 0 0;
+    font-size: 30px;
+    line-height: 1.1;
+}
+
+.eyebrow {
+    margin: 0;
+    color: var(--accent-strong);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.control-row,
+.toggle-row {
+    display: grid;
+    gap: 8px;
+}
+
+.control-row span,
+.toggle-row span {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.control-row strong {
+    color: var(--ink);
+}
+
+select,
+input[type="range"] {
+    width: 100%;
+}
+
+select {
+    height: 42px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0 10px;
+    background: #ffffff;
+}
+
+input[type="range"] {
+    accent-color: var(--accent);
+}
+
+.toggle-row {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+}
+
+.toggle-row input {
+    width: 22px;
+    height: 22px;
+    accent-color: var(--accent);
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.button-grid button:last-child {
+    grid-column: 1 / -1;
+}
+
+button {
+    min-height: 42px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: #ffffff;
+    background: var(--ink);
+    cursor: pointer;
+}
+
+button:hover {
+    background: var(--accent);
+}
+
+.canvas-stage {
+    position: relative;
+    min-height: 520px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: var(--shadow);
+}
+
+#artCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 620px;
+    cursor: crosshair;
+    touch-action: none;
+}
+
+.canvas-hint {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    margin: 0;
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.78);
+    font-size: 14px;
+}
+
+.gallery-page {
+    width: min(1120px, calc(100% - 36px));
+    margin: 0 auto;
+    padding: 36px 0;
+}
+
+.gallery-heading {
+    max-width: 680px;
+    margin-bottom: 28px;
+}
+
+.gallery-heading p:last-child {
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.gallery-card {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: var(--shadow);
+}
+
+.gallery-card h2 {
+    margin: 16px 16px 6px;
+    font-size: 20px;
+}
+
+.gallery-card p {
+    margin: 0 16px 18px;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.thumb {
+    height: 180px;
+    background-color: #eef2f1;
+}
+
+.thumb-aurora {
+    background:
+        radial-gradient(circle at 20% 30%, #3dd6d0 0 10%, transparent 11%),
+        radial-gradient(circle at 70% 34%, #8a5cf6 0 13%, transparent 14%),
+        radial-gradient(circle at 52% 68%, #ff7aa2 0 16%, transparent 17%),
+        linear-gradient(135deg, #ffffff, #dfe8e7);
+}
+
+.thumb-citrus {
+    background:
+        linear-gradient(36deg, transparent 0 44%, #264653 45% 48%, transparent 49%),
+        radial-gradient(circle at 34% 58%, #ffb703 0 16%, transparent 17%),
+        radial-gradient(circle at 68% 42%, #f25c54 0 12%, transparent 13%),
+        #f6f0df;
+}
+
+.thumb-neon {
+    background:
+        linear-gradient(24deg, transparent 0 22%, #00f5d4 23% 25%, transparent 26%),
+        linear-gradient(150deg, transparent 0 42%, #f15bb5 43% 46%, transparent 47%),
+        radial-gradient(circle at 74% 62%, #fee440 0 11%, transparent 12%),
+        #162026;
+}
+
+@media (max-width: 840px) {
+    .topbar,
+    .workspace {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .workspace {
+        grid-template-columns: 1fr;
+    }
+
+    .canvas-stage,
+    #artCanvas {
+        min-height: 460px;
+    }
+
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
 }
