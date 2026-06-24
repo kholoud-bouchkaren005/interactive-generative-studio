@@ -552,6 +552,232 @@ input[type="range"] {
     font-weight: 800;
 }
 
+select,
+input[type="file"] {
+    width: 100%;
+}
+
+select {
+    min-height: 46px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 0 14px;
+    background: rgba(0, 0, 0, 0.28);
+}
+
+.drop-zone {
+    display: grid;
+    place-items: center;
+    gap: 6px;
+    min-height: 156px;
+    padding: 20px;
+    border: 1px dashed rgba(255, 255, 255, 0.22);
+    border-radius: var(--radius-card);
+    color: #dcdcdc;
+    background: rgba(0, 0, 0, 0.22);
+    text-align: center;
+    cursor: pointer;
+}
+
+.drop-zone input {
+    width: 100%;
+    color: var(--text-muted);
+}
+
+.drop-zone span {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.drop-zone small {
+    color: var(--text-muted);
+}
+
+.upload-preview,
+.image-preview {
+    min-height: 180px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.28);
+}
+
+.upload-preview:empty {
+    display: none;
+}
+
+.upload-preview img,
+.image-preview img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 180px;
+    object-fit: cover;
+}
+
+.effect-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.effect-option {
+    min-width: 0;
+}
+
+.effect-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.effect-option span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: rgba(0, 0, 0, 0.2);
+    color: #d8d8d8;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.effect-option input:checked + span {
+    border-color: var(--accent);
+    background: rgba(124, 58, 237, 0.22);
+    color: #ffffff;
+}
+
+.error-message,
+.status-message {
+    margin: 0 0 18px;
+    padding: 12px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    color: #ffffff;
+    background: rgba(124, 58, 237, 0.14);
+}
+
+.status-message:empty {
+    display: none;
+}
+
+.canvas-controls {
+    display: grid;
+    gap: 18px;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.button-grid button:last-child {
+    grid-column: 1 / -1;
+}
+
+.toggle-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+}
+
+.toggle-row input {
+    width: 24px;
+    height: 24px;
+    accent-color: var(--accent);
+}
+
+.canvas-stage {
+    padding: 14px;
+}
+
+#artCanvas {
+    display: block;
+    width: 100%;
+    min-height: 620px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #101010;
+    cursor: crosshair;
+    touch-action: none;
+}
+
+.chroma-output {
+    grid-template-columns: 0.85fr 1fr;
+}
+
+.image-preview {
+    min-height: 420px;
+}
+
+.empty-preview::before {
+    content: "Image preview";
+    display: grid;
+    place-items: center;
+    min-height: 420px;
+    color: var(--text-muted);
+    font-weight: 800;
+}
+
+.palette-result {
+    display: grid;
+    align-content: start;
+    gap: 12px;
+}
+
+.palette-swatch {
+    display: grid;
+    grid-template-columns: 78px 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.22);
+}
+
+.swatch-color {
+    width: 78px;
+    height: 58px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.palette-swatch strong,
+.palette-swatch span {
+    display: block;
+}
+
+.palette-swatch span {
+    margin-top: 5px;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.palette-bar {
+    grid-column: 1 / -1;
+    display: flex;
+    min-height: 34px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: rgba(0, 0, 0, 0.24);
+}
+
+.palette-bar:empty {
+    display: none;
+}
+
+.palette-bar span {
+    min-width: 4%;
+}
+
 @media (max-width: 900px) {
     .site-header {
         align-items: flex-start;
@@ -603,5 +829,13 @@ input[type="range"] {
 
     .output-frame {
         min-height: 360px;
+    }
+
+    .chroma-output {
+        grid-template-columns: 1fr;
+    }
+
+    #artCanvas {
+        min-height: 460px;
     }
 }

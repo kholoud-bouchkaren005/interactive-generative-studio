@@ -1,35 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Axe 6 - ML Palette</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body class="studio-page">
-    <header class="topbar">
-        <a class="brand" href="{{ url_for('home') }}">Interactive Generative Studio</a>
-        <nav class="nav-links">
-            <a href="{{ url_for('generative') }}">Axe 1</a>
-            <a href="{{ url_for('data_art') }}">Axe 2</a>
-            <a href="{{ url_for('image_audio_tools') }}">Axe 3</a>
-            <a href="{{ url_for('canvas') }}">Axe 4</a>
-            <a href="{{ url_for('ml_palette') }}">Axe 6</a>
-        </nav>
-    </header>
+{% extends "base.html" %}
 
-    <main class="ml-page">
-        <section class="ml-panel">
-            <div class="panel-heading">
-                <p class="eyebrow">Axe 6 bonus</p>
-                <h1>ML Color Extraction</h1>
-                <p class="panel-copy">Upload an image and use K-means clustering to extract its dominant artistic palette.</p>
-            </div>
+{% block title %}Chroma - Studio{% endblock %}
 
-            <form id="paletteForm" class="palette-form">
-                <label class="control-row" for="imageInput">
-                    <span>Image file</span>
+{% block content %}
+<main class="module-page">
+    <section class="module-header shell">
+        <p class="breadcrumb">Studio / Chroma</p>
+        <h1>Chroma</h1>
+        <p>Extract dominant colors with machine learning.</p>
+    </section>
+
+    <section class="workspace-grid shell">
+        <aside class="control-panel">
+            <form id="paletteForm" class="controls">
+                <label class="drop-zone" for="imageInput">
                     <input type="file" id="imageInput" name="image" accept="image/*" required>
+                    <span>Drop image here or browse</span>
+                    <small>K-means will find the dominant colors</small>
                 </label>
 
                 <label class="control-row" for="colorCount">
@@ -37,18 +24,17 @@
                     <input type="range" id="colorCount" name="colors" min="2" max="8" value="5">
                 </label>
 
-                <button type="submit">Extract palette</button>
+                <button type="submit" class="submit-btn" data-loading-text="Extracting">Extract Palette</button>
             </form>
 
-            <p id="paletteMessage" class="muted"></p>
-        </section>
+            <p id="paletteMessage" class="status-message"></p>
+        </aside>
 
-        <section class="palette-output">
-            <div id="imagePreview" class="image-preview"></div>
+        <section class="output-panel chroma-output">
+            <div id="imagePreview" class="image-preview empty-preview"></div>
             <div id="paletteResult" class="palette-result"></div>
+            <div id="paletteBar" class="palette-bar"></div>
         </section>
-    </main>
-
-    <script src="{{ url_for('static', filename='main.js') }}"></script>
-</body>
-</html>
+    </section>
+</main>
+{% endblock %}

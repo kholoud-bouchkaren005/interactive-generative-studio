@@ -1,78 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Axe 3 - Image Editing</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body class="page">
-    <header class="topbar">
-        <a class="brand" href="{{ url_for('home') }}">Interactive Generative Studio</a>
-        <nav>
-            <a href="{{ url_for('image_audio_tools') }}">Axe 3</a>
-        </nav>
-    </header>
+{% extends "base.html" %}
 
-    <main class="generator-layout">
-        <section class="panel">
-            <p class="eyebrow">Axe 3</p>
-            <h1>Image Editing</h1>
-            <p class="muted">
-                Upload an image and apply creative filters with Pillow: grayscale, sepia, neon, blur, pixelate, contour, invert, mirror, and rotate.
-            </p>
+{% block title %}Lens - Studio{% endblock %}
 
+{% block content %}
+<main class="module-page">
+    <section class="module-header shell">
+        <p class="breadcrumb">Studio / Lens</p>
+        <h1>Lens</h1>
+        <p>Upload, transform, and download creative filters.</p>
+    </section>
+
+    <section class="workspace-grid shell">
+        <aside class="control-panel">
             {% if error %}
                 <p class="error-message">{{ error }}</p>
             {% endif %}
 
             <form action="{{ url_for('apply_image_effect_route') }}" method="POST" enctype="multipart/form-data" class="controls">
-                <label>
-                    <span>Image file</span>
-                    <input class="file-input" type="file" name="image" accept="image/*" required>
+                <label class="drop-zone" for="lensImage">
+                    <input type="file" id="lensImage" name="image" accept="image/*" required data-preview-target="lensPreview">
+                    <span>Drop image here or browse</span>
+                    <small>PNG, JPG, or WEBP</small>
                 </label>
 
-                <label>
-                    <span>Effect</span>
-                    <select name="effect">
+                <div id="lensPreview" class="upload-preview"></div>
+
+                <div class="field-group">
+                    <span class="field-label">Effect</span>
+                    <div class="effect-grid">
                         {% for effect in ["grayscale", "sepia", "neon", "invert", "blur", "pixelate", "contour", "mirror", "rotate"] %}
-                            <option value="{{ effect }}" {% if effect == selected_effect %}selected{% endif %}>
-                                {{ effect|capitalize }}
-                            </option>
+                            <label class="effect-option">
+                                <input type="radio" name="effect" value="{{ effect }}" {% if effect == selected_effect %}checked{% endif %}>
+                                <span>{{ effect|capitalize }}</span>
+                            </label>
                         {% endfor %}
-                    </select>
-                </label>
+                    </div>
+                </div>
 
-                <label>
-                    <span>Effect strength <strong id="strengthValue">{{ strength }}</strong></span>
+                <label class="control-row" for="strength">
+                    <span>Strength <strong data-range-value="strength">{{ strength }}</strong></span>
                     <input type="range" id="strength" name="strength" min="1" max="12" value="{{ strength }}" step="1">
                 </label>
 
-                <button type="submit">Apply effect</button>
+                <button type="submit" class="submit-btn" data-loading-text="Applying">Apply Effect</button>
             </form>
-        </section>
+        </aside>
 
-        <section class="art-stage">
+        <section class="output-panel">
+            <div class="output-frame">
+                {% if output %}
+                    <img src="data:image/png;base64,{{ output }}" alt="Processed Lens output">
+                {% else %}
+                    <div class="empty-state">
+                        <strong>Image output</strong>
+                        <span>Upload an image and apply a creative filter.</span>
+                    </div>
+                {% endif %}
+            </div>
             {% if output %}
-                <img src="data:image/png;base64,{{ output }}" alt="Edited image output">
-                <a class="download-link" href="data:image/png;base64,{{ output }}" download="axe3-edited-image.png">
-                    Download PNG
-                </a>
-            {% else %}
-                <div class="empty-art">
-                    <p>Upload an image and apply a creative effect.</p>
-                </div>
+                <a class="download-link" href="data:image/png;base64,{{ output }}" download="lens-edited-image.png">Download PNG</a>
             {% endif %}
         </section>
-    </main>
-
-    <script>
-        const strength = document.getElementById("strength");
-        const strengthValue = document.getElementById("strengthValue");
-
-        strength.addEventListener("input", () => {
-            strengthValue.textContent = strength.value;
-        });
-    </script>
-</body>
-</html>
+    </section>
+</main>
+{% endblock %}
