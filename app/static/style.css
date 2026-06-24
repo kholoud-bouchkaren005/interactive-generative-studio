@@ -277,6 +277,117 @@ button:hover {
         #162026;
 }
 
+.ml-page {
+    display: grid;
+    grid-template-columns: 360px minmax(0, 1fr);
+    gap: 22px;
+    padding: 22px;
+    min-height: calc(100vh - 73px);
+}
+
+.ml-panel,
+.palette-output {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: var(--shadow);
+}
+
+.ml-panel {
+    align-self: start;
+    display: grid;
+    gap: 20px;
+    padding: 22px;
+}
+
+.panel-copy {
+    color: var(--muted);
+    line-height: 1.55;
+}
+
+.palette-form {
+    display: grid;
+    gap: 18px;
+}
+
+input[type="file"] {
+    width: 100%;
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+    padding: 12px;
+    background: #fbfbfb;
+}
+
+.form-message {
+    min-height: 22px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.palette-output {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.85fr) minmax(280px, 1fr);
+    gap: 18px;
+    padding: 18px;
+}
+
+.image-preview {
+    min-height: 420px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background:
+        linear-gradient(45deg, #f1f3f3 25%, transparent 25%),
+        linear-gradient(-45deg, #f1f3f3 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #f1f3f3 75%),
+        linear-gradient(-45deg, transparent 75%, #f1f3f3 75%);
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+    background-size: 20px 20px;
+    overflow: hidden;
+}
+
+.image-preview img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 420px;
+    object-fit: cover;
+}
+
+.palette-result {
+    display: grid;
+    align-content: start;
+    gap: 12px;
+}
+
+.palette-swatch {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+}
+
+.swatch-color {
+    width: 72px;
+    height: 52px;
+    border-radius: 6px;
+    border: 1px solid rgba(23, 32, 38, 0.14);
+}
+
+.palette-swatch strong,
+.palette-swatch span {
+    display: block;
+}
+
+.palette-swatch span {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
 @media (max-width: 840px) {
     .topbar,
     .workspace {
@@ -290,6 +401,11 @@ button:hover {
     }
 
     .workspace {
+        grid-template-columns: 1fr;
+    }
+
+    .ml-page,
+    .palette-output {
         grid-template-columns: 1fr;
     }
 

@@ -2,9 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axe 6 - ML Color Palette</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body class="studio-page">
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('home') }}">Interactive Generative Studio</a>
+        <nav class="nav-links" aria-label="Main navigation">
+            <a href="{{ url_for('generative') }}">Canvas</a>
+            <a href="{{ url_for('gallery') }}">Gallery</a>
+            <a href="{{ url_for('upload') }}">Axe 6 ML</a>
+        </nav>
+    </header>
 
+    <main class="ml-page">
+        <section class="ml-panel">
+            <div class="panel-heading">
+                <p class="eyebrow">Axe 6 bonus</p>
+                <h1>ML Color Extraction</h1>
+                <p class="panel-copy">Upload an image and use K-means clustering to extract its dominant artistic palette.</p>
+            </div>
+
+            <form id="paletteForm" class="palette-form">
+                <label class="control-row" for="imageInput">
+                    <span>Image file</span>
+                    <input type="file" id="imageInput" name="image" accept="image/*" required>
+                </label>
+
+                <label class="control-row" for="colorCount">
+                    <span>Colors <strong id="colorCountValue">5</strong></span>
+                    <input type="range" id="colorCount" name="colors" min="2" max="8" value="5">
+                </label>
+
+                <button type="submit">Extract palette</button>
+            </form>
+
+            <p id="paletteMessage" class="form-message"></p>
+        </section>
+
+        <section class="palette-output" aria-label="Generated color palette">
+            <div id="imagePreview" class="image-preview"></div>
+            <div id="paletteResult" class="palette-result"></div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
 </html>

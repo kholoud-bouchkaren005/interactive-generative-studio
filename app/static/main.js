@@ -187,3 +187,73 @@ if (canvas) {
     seedArtwork();
     render();
 }
+
+const paletteForm = document.getElementById("paletteForm");
+
+if (paletteForm) {
+    const imageInput = document.getElementById("imageInput");
+    const colorCount = document.getElementById("colorCount");
+    const colorCountValue = document.getElementById("colorCountValue");
+    const paletteMessage = document.getElementById("paletteMessage");
+    const paletteResult = document.getElementById("paletteResult");
+    const imagePreview = document.getElementById("imagePreview");
+
+    function showPreview(file) {
+        imagePreview.innerHTML = "";
+        if (!file) return;
+
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.alt = "Uploaded artwork preview";
+        img.onload = () => URL.revokeObjectURL(img.src);
+        imagePreview.appendChild(img);
+    }
+
+    function renderPalette(colors) {
+        paletteResult.innerHTML = "";
+        colors.forEach((color) => {
+            const swatch = document.createElement("article");
+            swatch.className = "palette-swatch";
+            swatch.innerHTML = `
+                <div class="swatch-color" style="background:${color.hex}"></div>
+                <div>
+                    <strong>${color.hex}</strong>
+                    <span>RGB ${color.rgb.join(", ")} - ${color.percentage}%</span>
+                </div>
+            `;
+            paletteResult.appendChild(swatch);
+        });
+    }
+
+    colorCount.addEventListener("input", () => {
+        colorCountValue.textContent = colorCount.value;
+    });
+
+    imageInput.addEventListener("change", () => {
+        showPreview(imageInput.files[0]);
+    });
+
+    paletteForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        paletteMessage.textContent = "Extracting colors...";
+        paletteResult.innerHTML = "";
+
+        const formData = new FormData(paletteForm);
+        try {
+            const response = await fetch("/ml-palette", {
+                method: "POST",
+                body: formData,
+            });
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Palette extraction failed");
+            }
+
+            renderPalette(data.palette);
+            paletteMessage.textContent = "Palette extracted with K-means clustering.";
+        } catch (error) {
+            paletteMessage.textContent = error.message;
+        }
+    });
+}

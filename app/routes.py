@@ -2,10 +2,12 @@ from flask import render_template, request, jsonify
 from app import app
 import os
 
+from app.modules.ml_tools.color_extraction import extract_palette
+
 # Importation de la fonction depuis ton nouveau module
 try:
     from app.modules.ml_tools.style_transfer import apply_style
-except ImportError:
+except Exception:
     print("Warning: style_transfer module not found")
     apply_style = None
 
@@ -32,6 +34,29 @@ def gallery():
 @app.route("/upload")
 def upload():
     return render_template("upload.html")
+
+@app.route("/axe6")
+def axe6():
+    return render_template("upload.html")
+
+@app.route("/ml-palette", methods=["POST"])
+def ml_palette():
+    if "image" not in request.files:
+        return jsonify({"error": "Missing image file"}), 400
+
+    image_file = request.files["image"]
+    if image_file.filename == "":
+        return jsonify({"error": "No file selected"}), 400
+
+    try:
+        color_count = request.form.get("colors", 5)
+        palette = extract_palette(image_file, color_count)
+        return jsonify({
+            "success": True,
+            "palette": palette,
+        }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/style-transfer", methods=["POST"])
 def style_transfer():
