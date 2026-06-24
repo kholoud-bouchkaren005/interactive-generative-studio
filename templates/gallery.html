@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Axe 4 - Gallery{% endblock %}
+
+{% block extra_css %}
+.art-thumb {
+    height: 190px;
+}
+
+.thumb-aurora {
+    background:
+        radial-gradient(circle at 22% 30%, #3dd6d0 0 11%, transparent 12%),
+        radial-gradient(circle at 70% 36%, #8a5cf6 0 14%, transparent 15%),
+        radial-gradient(circle at 52% 68%, #ff7aa2 0 17%, transparent 18%),
+        linear-gradient(135deg, #fff, #dfe8e7);
+}
+
+.thumb-citrus {
+    background:
+        linear-gradient(36deg, transparent 0 44%, #264653 45% 48%, transparent 49%),
+        radial-gradient(circle at 34% 58%, #ffb703 0 16%, transparent 17%),
+        radial-gradient(circle at 68% 42%, #f25c54 0 12%, transparent 13%),
+        #f6f0df;
+}
+
+.thumb-neon {
+    background:
+        linear-gradient(24deg, transparent 0 22%, #00f5d4 23% 25%, transparent 26%),
+        linear-gradient(150deg, transparent 0 42%, #f15bb5 43% 46%, transparent 47%),
+        radial-gradient(circle at 74% 62%, #fee440 0 11%, transparent 12%),
+        #162026;
+}
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="mb-4">
+        <p class="eyebrow mb-2">Axe 4</p>
+        <h1 class="h2">Interactive Gallery</h1>
+        <p class="text-secondary mb-0">Sample artwork thumbnails from the interactive canvas workflow.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <article class="studio-card overflow-hidden h-100">
+                <div class="art-thumb thumb-aurora"></div>
+                <div class="p-3">
+                    <h2 class="h5">Aurora Burst</h2>
+                    <p class="text-secondary mb-0">Palette selector with animated circles and squares.</p>
+                </div>
+            </article>
+        </div>
+        <div class="col-md-4">
+            <article class="studio-card overflow-hidden h-100">
+                <div class="art-thumb thumb-citrus"></div>
+                <div class="p-3">
+                    <h2 class="h5">Citrus Motion</h2>
+                    <p class="text-secondary mb-0">Slider-driven size changes and click-generated triangles.</p>
+                </div>
+            </article>
+        </div>
+        <div class="col-md-4">
+            <article class="studio-card overflow-hidden h-100">
+                <div class="art-thumb thumb-neon"></div>
+                <div class="p-3">
+                    <h2 class="h5">Neon Trace</h2>
+                    <p class="text-secondary mb-0">Drag interaction creates layered lines on the canvas.</p>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+{% endblock %}
