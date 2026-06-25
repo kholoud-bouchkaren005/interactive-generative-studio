@@ -229,6 +229,25 @@ button:hover,
     box-shadow: 0 0 28px var(--accent-glow);
 }
 
+button.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+button.loading::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.28);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 700ms linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
 .particle-field {
     position: absolute;
     inset: 0;
@@ -342,6 +361,11 @@ button:hover,
         radial-gradient(circle at 10% 14%, rgba(124, 58, 237, 0.18), transparent 28%),
         radial-gradient(circle at 86% 28%, rgba(255, 255, 255, 0.05), transparent 24%),
         var(--bg-primary);
+}
+
+.submit-btn,
+.button-grid button {
+    min-width: 0;
 }
 
 .module-header {
@@ -889,6 +913,10 @@ select {
 
     .site-nav {
         justify-content: flex-start;
+    }
+
+    .site-nav a {
+        padding: 0 11px;
     }
 
     .site-footer {
