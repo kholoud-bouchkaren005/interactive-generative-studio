@@ -23,6 +23,10 @@ def apply_image_effect(image_file, effect="grayscale", strength=4):
         result = image.filter(ImageFilter.GaussianBlur(radius=strength))
     elif effect == "contour":
         result = image.filter(ImageFilter.CONTOUR)
+    elif effect == "mirror":
+        result = ImageOps.mirror(image)
+    elif effect == "rotate":
+        result = image.rotate(90, expand=True)
     elif effect == "pixelate":
         small_width = max(18, image.width // (strength * 2))
         small_height = max(18, image.height // (strength * 2))

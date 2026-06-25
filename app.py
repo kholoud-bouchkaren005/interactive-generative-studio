@@ -1,7 +1,7 @@
 import os
 import sys
 
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request, url_for
 
 
 template_dir = os.path.abspath("app/templates")
@@ -15,7 +15,7 @@ app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    return redirect(url_for("image_audio_tools"))
 
 
 @app.route("/axe3")
