@@ -31,7 +31,7 @@ MODULES = [
         "icon": "P",
         "title": "Pulsar",
         "route": "data_art",
-        "description": "Weather rhythms turned into abstract landscapes",
+        "description": "Living generative pulses exported as animated GIFs",
     },
     {
         "key": "lens",

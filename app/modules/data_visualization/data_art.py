@@ -119,7 +119,7 @@ def _render_frame(
     colors = theme["colors"]
     background = theme["background"]
 
-    fig, ax = plt.subplots(figsize=(9, 5), dpi=100)
+    fig, ax = plt.subplots(figsize=(11.25, 6.25), dpi=80)
     fig.patch.set_facecolor(background)
     ax.set_facecolor(background)
     ax.set_xlim(0, width)
@@ -193,14 +193,23 @@ def _render_frame(
     form_x = center_x + radius * np.cos(theta + rotation)
     form_y = center_y + radius * np.sin(theta + rotation)
     form_color = _color_at(colors, t * color_speed + 1.5)
-    ax.fill(form_x, form_y, color=form_color + (0.34,), linewidth=0)
+    for band in range(5, 0, -1):
+        band_scale = band / 5
+        band_color = _color_at(colors, t * color_speed + 1.5 + band * 0.38)
+        ax.fill(
+            center_x + (form_x - center_x) * band_scale,
+            center_y + (form_y - center_y) * band_scale,
+            color=band_color + (0.09 + band * 0.045,),
+            linewidth=0,
+        )
     ax.plot(form_x, form_y, color=tuple(min(1, channel + 0.18) for channel in form_color), alpha=0.86, linewidth=1.6)
 
     shimmer_x = np.arange(0, width, 28)
     shimmer_y = np.arange(0, height, 28)
     sx, sy = np.meshgrid(shimmer_x, shimmer_y)
     shimmer_alpha = np.maximum(0, np.sin(sx / 10 + t * 3)) * 0.3
-    ax.scatter(sx.flatten(), sy.flatten(), s=5, c="white", alpha=float(np.mean(shimmer_alpha)) * 0.42, linewidths=0)
+    shimmer_colors = [(1, 1, 1, alpha * 0.42) for alpha in shimmer_alpha.flatten()]
+    ax.scatter(sx.flatten(), sy.flatten(), s=5, c=shimmer_colors, linewidths=0)
 
     fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
     return fig
@@ -246,7 +255,14 @@ def generate_pulsar_animation(
             beat_mode,
         )
         buffer = BytesIO()
-        fig.savefig(buffer, format="png", dpi=80, facecolor=theme["background"])
+        fig.savefig(
+            buffer,
+            format="png",
+            dpi=80,
+            bbox_inches="tight",
+            pad_inches=0,
+            facecolor=theme["background"],
+        )
         plt.close(fig)
         buffer.seek(0)
         frame = Image.open(buffer).convert("P", palette=Image.ADAPTIVE, colors=256)
@@ -278,11 +294,10 @@ def generate_pulsar_animation(
 
 
 def generate_data_art(days=45, theme_name="aurora", density=5):
+    wave_layers = density if density is not None else 5
     gif_bytes, stats = generate_pulsar_animation(
         theme_name=theme_name,
-        duration=3,
-        fps=12,
-        wave_layers=density,
+        wave_layers=wave_layers,
         particle_count=max(20, min(200, int(days) * 2)),
     )
     first_frame = Image.open(BytesIO(gif_bytes))
