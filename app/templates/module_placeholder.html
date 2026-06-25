@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Generative Studio</title>
+    <title>{{ axe }} - {{ title }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body class="page">
@@ -19,23 +19,15 @@
         </nav>
     </header>
 
-    <main class="home-shell">
-        <section class="intro">
-            <p class="eyebrow">Axe 5</p>
-            <h1>Web Integration & Flask Deployment</h1>
-            <p class="lead">
-                A unified Flask shell for the Interactive Generative Studio, ready for each team branch to plug in its module.
+    <main class="placeholder-shell">
+        <section class="placeholder-card">
+            <p class="eyebrow">{{ axe }}</p>
+            <h1>{{ title }}</h1>
+            <p class="lead">{{ description }}</p>
+            <p class="muted">
+                During final integration, replace this placeholder with the completed template, route logic, and module files from the corresponding branch.
             </p>
-        </section>
-
-        <section class="module-grid" aria-label="Project modules">
-            {% for module in modules %}
-                <a class="module-card" href="{{ url_for(module.route) }}">
-                    <span>{{ module.axe }}</span>
-                    <h2>{{ module.title }}</h2>
-                    <p>{{ module.description }}</p>
-                </a>
-            {% endfor %}
+            <a class="primary-link" href="{{ url_for('home') }}">Back to dashboard</a>
         </section>
     </main>
 </body>

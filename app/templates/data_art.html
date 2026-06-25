@@ -2,9 +2,100 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axe 2 - Data Art</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body class="page">
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('home') }}">Interactive Generative Studio</a>
+        <nav>
+            <a href="{{ url_for('data_art') }}">Axe 2</a>
+        </nav>
+    </header>
 
+    <main class="generator-layout">
+        <section class="panel">
+            <p class="eyebrow">Axe 2</p>
+            <h1>Data Art</h1>
+            <p class="muted">
+                Transform simulated weather data into an abstract artistic landscape using Pandas and Matplotlib.
+            </p>
+
+            <form action="{{ url_for('generate_data_art_route') }}" method="POST" class="controls">
+                <label>
+                    <span>Dataset days <strong id="daysValue">{{ days }}</strong></span>
+                    <input type="range" id="days" name="days" min="20" max="90" value="{{ days }}" step="5">
+                </label>
+
+                <label>
+                    <span>Visual density <strong id="densityValue">{{ density }}</strong></span>
+                    <input type="range" id="density" name="density" min="3" max="12" value="{{ density }}" step="1">
+                </label>
+
+                <label>
+                    <span>Theme</span>
+                    <select name="theme">
+                        {% for theme in themes %}
+                            <option value="{{ theme }}" {% if theme == selected_theme %}selected{% endif %}>
+                                {{ theme|capitalize }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </label>
+
+                <button type="submit">Generate data artwork</button>
+            </form>
+
+            {% if stats %}
+                <div class="stats-grid">
+                    <article>
+                        <strong>{{ stats.days }}</strong>
+                        <span>days</span>
+                    </article>
+                    <article>
+                        <strong>{{ stats.avg_temperature }}</strong>
+                        <span>avg temp</span>
+                    </article>
+                    <article>
+                        <strong>{{ stats.avg_humidity }}</strong>
+                        <span>avg humidity</span>
+                    </article>
+                    <article>
+                        <strong>{{ stats.avg_wind }}</strong>
+                        <span>avg wind</span>
+                    </article>
+                </div>
+            {% endif %}
+        </section>
+
+        <section class="art-stage">
+            {% if artwork %}
+                <img src="data:image/png;base64,{{ artwork }}" alt="Generated data artwork">
+                <a class="download-link" href="data:image/png;base64,{{ artwork }}" download="axe2-data-art.png">
+                    Download PNG
+                </a>
+            {% else %}
+                <div class="empty-art">
+                    <p>Generate an artistic visualization from the weather dataset.</p>
+                </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <script>
+        const days = document.getElementById("days");
+        const density = document.getElementById("density");
+        const daysValue = document.getElementById("daysValue");
+        const densityValue = document.getElementById("densityValue");
+
+        days.addEventListener("input", () => {
+            daysValue.textContent = days.value;
+        });
+
+        density.addEventListener("input", () => {
+            densityValue.textContent = density.value;
+        });
+    </script>
 </body>
 </html>
