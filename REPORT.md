@@ -8,6 +8,12 @@ The artistic direction is based on the idea of a modular creative studio. Instea
 
 The visual identity of the studio is clean and tool-focused. The interface uses simple panels, clear controls, responsive layouts, and strong color accents. This makes the application usable during a live presentation while still keeping the creative outputs at the center of the experience.
 
+## Team Members and Contributions
+
+- Nihal: Axe 1 - Generative Art, Axe 2 - Data-Driven Creative Visualization.
+- Kholoud: Axe 3 - Image Editing, Axe 5 - Web Integration.
+- Ghizlane: Axe 4 - Interactivity Module, Axe 6 - ML Color Extraction Bonus.
+
 ## 2. Implemented Modules
 
 ### Axe 1 - Generative Art

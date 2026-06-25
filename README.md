@@ -9,6 +9,12 @@ Interactive Generative Studio is a Flask web application for the ENSA Digital Cr
 - README with installation steps and explanations: this file.
 - 2-3 page report: see `REPORT.md`.
 
+## Team Members and Contributions
+
+- Nihal: Axe 1 - Generative Art, Axe 2 - Data-Driven Creative Visualization.
+- Kholoud: Axe 3 - Image Editing, Axe 5 - Web Integration.
+- Ghizlane: Axe 4 - Interactivity Module, Axe 6 - ML Color Extraction Bonus.
+
 ## Installation
 
 Create and activate a virtual environment:
