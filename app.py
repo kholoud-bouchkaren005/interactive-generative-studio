@@ -1,67 +1,168 @@
-from pathlib import Path
+import os
+import sys
 
-from flask import Flask, flash, redirect, render_template, request, url_for
-from werkzeug.utils import secure_filename
-
-from ml_module import extract_dominant_colors
+from flask import Flask, jsonify, redirect, render_template, request, url_for
 
 
-BASE_DIR = Path(__file__).resolve().parent
-UPLOAD_DIR = BASE_DIR / "uploads"
-UPLOAD_DIR.mkdir(exist_ok=True)
+template_dir = os.path.abspath("app/templates")
+static_dir = os.path.abspath("app/static")
+sys.path.insert(0, os.path.abspath("app"))
 
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
+from modules.data_visualization.data_art import THEMES, generate_data_art
+from modules.generative_art.artworks import PALETTES, generate_artwork
+from modules.image_audio_processing.image_tools import apply_image_effect
+from modules.ml_tools.color_extraction import extract_palette
 
-app = Flask(__name__)
-app.config["SECRET_KEY"] = "interactive-generative-studio-dev-key"
-app.config["UPLOAD_FOLDER"] = UPLOAD_DIR
+
+app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
 
-def allowed_file(filename):
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+MODULES = [
+    {
+        "axe": "Axe 1",
+        "title": "Generative Art",
+        "route": "generative",
+        "description": "Procedural artworks built with loops, randomness, and OOP shapes.",
+    },
+    {
+        "axe": "Axe 2",
+        "title": "Data Art",
+        "route": "data_art",
+        "description": "Artistic visualizations generated from processed datasets.",
+    },
+    {
+        "axe": "Axe 3",
+        "title": "Image Editing",
+        "route": "image_audio_tools",
+        "description": "Creative upload workflow for visual filters and transformations.",
+    },
+    {
+        "axe": "Axe 4",
+        "title": "Interactive Canvas",
+        "route": "canvas",
+        "description": "Real-time drawing tools with sliders, palettes, and animation.",
+    },
+    {
+        "axe": "Axe 6",
+        "title": "ML Palette",
+        "route": "ml_palette",
+        "description": "Dominant color extraction with K-means clustering.",
+    },
+]
 
 
 @app.route("/")
 def home():
-    return redirect(url_for("canvas"))
+    return render_template("home.html", modules=MODULES)
 
 
-# TODO Axe 1: Generative Art
-# Partners can replace this placeholder with their Python/Pygame/Matplotlib artwork routes.
 @app.route("/axe1")
-def axe1_placeholder():
-    return render_template(
-        "placeholder.html",
-        axe_title="Axe 1 - Generative Art",
-        description="TODO: Add loops, randomness, OOP shapes, and generated artwork outputs here.",
-    )
-
-
-# TODO Axe 2: Data-Driven Creative Visualization
-# Partners can plug Pandas/Matplotlib/Seaborn visualizations into this route.
-@app.route("/axe2")
-def axe2_placeholder():
-    return render_template(
-        "placeholder.html",
-        axe_title="Axe 2 - Data Art",
-        description="TODO: Add dataset loading, cleaning, and artistic visualizations here.",
-    )
-
-
-# TODO Axe 3: Image or Audio Editing
-# Partners can connect PIL/OpenCV/PyDub effects and upload workflows here.
-@app.route("/axe3")
-def axe3_placeholder():
-    return render_template(
-        "placeholder.html",
-        axe_title="Axe 3 - Image/Audio Editing",
-        description="TODO: Add image filters, distortions, audio effects, and export features here.",
-    )
-
-
-# Axe 4: Interactivity Module
-@app.route("/canvas")
 @app.route("/generative")
+def generative():
+    return render_template(
+        "generative.html",
+        palettes=PALETTES.keys(),
+        selected_palette="aurora",
+        shape_count=60,
+        max_size=48,
+        artwork=None,
+    )
+
+
+@app.route("/generate", methods=["POST"])
+def generate():
+    shape_count = int(request.form.get("shape_count", 60))
+    max_size = int(request.form.get("max_size", 48))
+    palette = request.form.get("palette", "aurora")
+
+    artwork = generate_artwork(
+        shape_count=shape_count,
+        max_size=max_size,
+        palette_name=palette,
+    )
+
+    return render_template(
+        "generative.html",
+        palettes=PALETTES.keys(),
+        selected_palette=palette,
+        shape_count=shape_count,
+        max_size=max_size,
+        artwork=artwork,
+    )
+
+
+@app.route("/axe2")
+@app.route("/data-art")
+def data_art():
+    return render_template(
+        "data_art.html",
+        themes=THEMES.keys(),
+        selected_theme="ocean",
+        days=45,
+        density=6,
+        artwork=None,
+        stats=None,
+    )
+
+
+@app.route("/generate-data-art", methods=["POST"])
+def generate_data_art_route():
+    days = int(request.form.get("days", 45))
+    density = int(request.form.get("density", 6))
+    theme = request.form.get("theme", "ocean")
+
+    artwork, stats = generate_data_art(days=days, theme_name=theme, density=density)
+
+    return render_template(
+        "data_art.html",
+        themes=THEMES.keys(),
+        selected_theme=theme,
+        days=days,
+        density=density,
+        artwork=artwork,
+        stats=stats,
+    )
+
+
+@app.route("/axe3")
+@app.route("/upload")
+def image_audio_tools():
+    return render_template(
+        "upload.html",
+        selected_effect="grayscale",
+        strength=4,
+        output=None,
+    )
+
+
+@app.route("/apply-image-effect", methods=["POST"])
+def apply_image_effect_route():
+    image_file = request.files.get("image")
+    effect = request.form.get("effect", "grayscale")
+    strength = int(request.form.get("strength", 4))
+
+    if not image_file or image_file.filename == "":
+        return render_template(
+            "upload.html",
+            selected_effect=effect,
+            strength=strength,
+            output=None,
+            error="Please upload an image first.",
+        )
+
+    output = apply_image_effect(image_file, effect=effect, strength=strength)
+
+    return render_template(
+        "upload.html",
+        selected_effect=effect,
+        strength=strength,
+        output=output,
+        error=None,
+    )
+
+
+@app.route("/axe4")
+@app.route("/canvas")
 @app.route("/interactivity")
 def canvas():
     return render_template("canvas.html")
@@ -69,46 +170,29 @@ def canvas():
 
 @app.route("/gallery")
 def gallery():
-    return render_template("gallery.html")
+    return render_template("gallery.html", modules=MODULES)
 
 
-# Axe 6: Optional ML Bonus - Color Extraction
-@app.route("/ml-palette", methods=["GET", "POST"])
-@app.route("/axe6", methods=["GET", "POST"])
-@app.route("/upload", methods=["GET", "POST"])
+@app.route("/axe6")
+@app.route("/ml-palette")
 def ml_palette():
-    palette = None
-    uploaded_filename = None
-    k = 5
+    return render_template("ml_palette.html")
 
-    if request.method == "POST":
-        k = int(request.form.get("k", 5))
-        image = request.files.get("image")
 
-        if not image or image.filename == "":
-            flash("Please choose an image file.")
-            return render_template("ml_palette.html", palette=palette, k=k)
+@app.route("/extract-palette", methods=["POST"])
+def extract_palette_route():
+    image_file = request.files.get("image")
+    if not image_file or image_file.filename == "":
+        return jsonify({"error": "Please upload an image first."}), 400
 
-        if not allowed_file(image.filename):
-            flash("Allowed formats: PNG, JPG, JPEG, WEBP.")
-            return render_template("ml_palette.html", palette=palette, k=k)
+    colors = int(request.form.get("colors", 5))
+    palette = extract_palette(image_file, colors)
+    return jsonify({"palette": palette})
 
-        filename = secure_filename(image.filename)
-        image_path = app.config["UPLOAD_FOLDER"] / filename
-        image.save(image_path)
-        uploaded_filename = filename
 
-        try:
-            palette = extract_dominant_colors(image_path, k=k)
-        except Exception as exc:
-            flash(f"Color extraction failed: {exc}")
-
-    return render_template(
-        "ml_palette.html",
-        palette=palette,
-        uploaded_filename=uploaded_filename,
-        k=k,
-    )
+@app.route("/legacy-home")
+def legacy_home():
+    return redirect(url_for("home"))
 
 
 if __name__ == "__main__":

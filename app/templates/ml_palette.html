@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axe 6 - ML Palette</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="studio-page">
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('home') }}">Interactive Generative Studio</a>
+        <nav class="nav-links">
+            <a href="{{ url_for('generative') }}">Axe 1</a>
+            <a href="{{ url_for('data_art') }}">Axe 2</a>
+            <a href="{{ url_for('image_audio_tools') }}">Axe 3</a>
+            <a href="{{ url_for('canvas') }}">Axe 4</a>
+            <a href="{{ url_for('ml_palette') }}">Axe 6</a>
+        </nav>
+    </header>
+
+    <main class="ml-page">
+        <section class="ml-panel">
+            <div class="panel-heading">
+                <p class="eyebrow">Axe 6 bonus</p>
+                <h1>ML Color Extraction</h1>
+                <p class="panel-copy">Upload an image and use K-means clustering to extract its dominant artistic palette.</p>
+            </div>
+
+            <form id="paletteForm" class="palette-form">
+                <label class="control-row" for="imageInput">
+                    <span>Image file</span>
+                    <input type="file" id="imageInput" name="image" accept="image/*" required>
+                </label>
+
+                <label class="control-row" for="colorCount">
+                    <span>Colors <strong id="colorCountValue">5</strong></span>
+                    <input type="range" id="colorCount" name="colors" min="2" max="8" value="5">
+                </label>
+
+                <button type="submit">Extract palette</button>
+            </form>
+
+            <p id="paletteMessage" class="muted"></p>
+        </section>
+
+        <section class="palette-output">
+            <div id="imagePreview" class="image-preview"></div>
+            <div id="paletteResult" class="palette-result"></div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>

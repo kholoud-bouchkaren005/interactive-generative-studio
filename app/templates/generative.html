@@ -3,74 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Studio - Axe 4</title>
+    <title>Axe 1 - Generative Art</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="studio-page">
+<body class="page">
     <header class="topbar">
         <a class="brand" href="{{ url_for('home') }}">Interactive Generative Studio</a>
-        <nav class="nav-links" aria-label="Main navigation">
-            <a href="{{ url_for('generative') }}">Canvas</a>
-            <a href="{{ url_for('gallery') }}">Gallery</a>
-            <a href="{{ url_for('upload') }}">Upload</a>
+        <nav>
+            <a href="{{ url_for('generative') }}">Axe 1</a>
         </nav>
     </header>
 
-    <main class="workspace">
-        <section class="tool-panel" aria-label="Interactive controls">
-            <div class="panel-heading">
-                <p class="eyebrow">Axe 4</p>
-                <h1>Interactivity Module</h1>
-            </div>
+    <main class="generator-layout">
+        <section class="panel">
+            <p class="eyebrow">Axe 1</p>
+            <h1>Generative Art</h1>
+            <p class="muted">Generate layered geometric art with random rules and OOP shape classes.</p>
 
-            <label class="control-row" for="shapeType">
-                <span>Shape</span>
-                <select id="shapeType">
-                    <option value="circle">Circle</option>
-                    <option value="square">Square</option>
-                    <option value="triangle">Triangle</option>
-                    <option value="line">Line</option>
-                </select>
-            </label>
+            <form action="{{ url_for('generate') }}" method="POST" class="controls">
+                <label>
+                    <span>Number of shapes <strong id="shapeCountValue">{{ shape_count }}</strong></span>
+                    <input type="range" id="shapeCount" name="shape_count" min="10" max="180" value="{{ shape_count }}" step="5">
+                </label>
 
-            <label class="control-row" for="palette">
-                <span>Palette</span>
-                <select id="palette">
-                    <option value="aurora">Aurora</option>
-                    <option value="citrus">Citrus</option>
-                    <option value="mono">Ink</option>
-                    <option value="neon">Neon</option>
-                </select>
-            </label>
+                <label>
+                    <span>Maximum size <strong id="sizeValue">{{ max_size }}</strong></span>
+                    <input type="range" id="maxSize" name="max_size" min="12" max="110" value="{{ max_size }}" step="2">
+                </label>
 
-            <label class="control-row" for="shapeSize">
-                <span>Size <strong id="sizeValue">34</strong></span>
-                <input type="range" id="shapeSize" min="10" max="90" value="34">
-            </label>
+                <label>
+                    <span>Palette</span>
+                    <select name="palette">
+                        {% for palette in palettes %}
+                            <option value="{{ palette }}" {% if palette == selected_palette %}selected{% endif %}>
+                                {{ palette|capitalize }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </label>
 
-            <label class="control-row" for="shapeCount">
-                <span>Burst <strong id="countValue">5</strong></span>
-                <input type="range" id="shapeCount" min="1" max="18" value="5">
-            </label>
-
-            <label class="toggle-row" for="animateToggle">
-                <span>Animation</span>
-                <input type="checkbox" id="animateToggle" checked>
-            </label>
-
-            <div class="button-grid">
-                <button type="button" id="randomBtn">Random</button>
-                <button type="button" id="clearBtn">Clear</button>
-                <button type="button" id="downloadBtn">Download PNG</button>
-            </div>
+                <button type="submit">Generate artwork</button>
+            </form>
         </section>
 
-        <section class="canvas-stage" aria-label="Interactive drawing canvas">
-            <canvas id="artCanvas" width="960" height="620"></canvas>
-            <p class="canvas-hint">Click or drag on the canvas to add shapes.</p>
+        <section class="art-stage">
+            {% if artwork %}
+                <img src="data:image/png;base64,{{ artwork }}" alt="Generated geometric artwork">
+                <a class="download-link" href="data:image/png;base64,{{ artwork }}" download="axe1-generative-art.png">
+                    Download PNG
+                </a>
+            {% else %}
+                <div class="empty-art">
+                    <p>Choose parameters and generate your first artwork.</p>
+                </div>
+            {% endif %}
         </section>
     </main>
 
-    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script>
+        const shapeCount = document.getElementById("shapeCount");
+        const maxSize = document.getElementById("maxSize");
+        const shapeCountValue = document.getElementById("shapeCountValue");
+        const sizeValue = document.getElementById("sizeValue");
+
+        shapeCount.addEventListener("input", () => {
+            shapeCountValue.textContent = shapeCount.value;
+        });
+
+        maxSize.addEventListener("input", () => {
+            sizeValue.textContent = maxSize.value;
+        });
+    </script>
 </body>
 </html>

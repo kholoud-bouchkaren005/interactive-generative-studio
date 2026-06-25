@@ -240,7 +240,7 @@ if (paletteForm) {
 
         const formData = new FormData(paletteForm);
         try {
-            const response = await fetch("/ml-palette", {
+            const response = await fetch("/extract-palette", {
                 method: "POST",
                 body: formData,
             });

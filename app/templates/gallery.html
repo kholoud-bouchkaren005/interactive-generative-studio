@@ -6,39 +6,38 @@
     <title>Gallery - Interactive Generative Studio</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body class="studio-page">
+<body class="page">
     <header class="topbar">
         <a class="brand" href="{{ url_for('home') }}">Interactive Generative Studio</a>
-        <nav class="nav-links" aria-label="Main navigation">
-            <a href="{{ url_for('generative') }}">Canvas</a>
-            <a href="{{ url_for('gallery') }}">Gallery</a>
-            <a href="{{ url_for('upload') }}">Upload</a>
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('generative') }}">Axe 1</a>
+            <a href="{{ url_for('data_art') }}">Axe 2</a>
+            <a href="{{ url_for('image_audio_tools') }}">Axe 3</a>
+            <a href="{{ url_for('canvas') }}">Axe 4</a>
+            <a href="{{ url_for('ml_palette') }}">Axe 6</a>
         </nav>
     </header>
 
-    <main class="gallery-page">
-        <section class="gallery-heading">
-            <p class="eyebrow">Axe 4</p>
-            <h1>Interactive Gallery</h1>
-            <p>Browse sample outputs made with palettes, sliders, generated bursts, and canvas interaction.</p>
+    <main class="gallery-shell">
+        <section class="intro compact">
+            <p class="eyebrow">Axe 5</p>
+            <h1>Studio Gallery</h1>
+            <p class="lead">A responsive gallery page for browsing generated outputs and module previews.</p>
         </section>
 
-        <section class="gallery-grid" aria-label="Artwork thumbnails">
-            <article class="gallery-card aurora-card">
-                <div class="thumb thumb-aurora"></div>
-                <h2>Aurora Burst</h2>
-                <p>Palette selector with animated circles and squares.</p>
-            </article>
-            <article class="gallery-card citrus-card">
-                <div class="thumb thumb-citrus"></div>
-                <h2>Citrus Motion</h2>
-                <p>Slider-driven size changes and click-generated triangles.</p>
-            </article>
-            <article class="gallery-card neon-card">
-                <div class="thumb thumb-neon"></div>
-                <h2>Neon Trace</h2>
-                <p>Drag interaction creates layered lines on the canvas.</p>
-            </article>
+        <section class="gallery-grid">
+            {% for module in modules %}
+                <article class="gallery-card">
+                    <div class="thumb thumb-{{ loop.index }}"></div>
+                    <div>
+                        <span>{{ module.axe }}</span>
+                        <h2>{{ module.title }}</h2>
+                        <p>{{ module.description }}</p>
+                        <a href="{{ url_for(module.route) }}">Open module</a>
+                    </div>
+                </article>
+            {% endfor %}
         </section>
     </main>
 </body>
