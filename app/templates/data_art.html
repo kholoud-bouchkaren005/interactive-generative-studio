@@ -3,80 +3,527 @@
 {% block title %}Pulsar - Studio{% endblock %}
 
 {% block content %}
-<main class="module-page">
-    <section class="module-header shell">
-        <p class="breadcrumb">Studio / Pulsar</p>
+<style>
+    .pulsar-page {
+        min-height: 100vh;
+        padding: 64px clamp(18px, 4vw, 56px) 88px;
+        background:
+            radial-gradient(circle at 16% 10%, rgba(124, 58, 237, 0.16), transparent 28%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 260px),
+            var(--bg-primary);
+    }
+
+    .pulsar-header {
+        margin: 0 0 34px;
+    }
+
+    .pulsar-breadcrumb {
+        margin: 0 0 10px;
+        color: var(--text-muted);
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .pulsar-header h1 {
+        margin: 0;
+        color: #ffffff;
+        font-size: clamp(52px, 8vw, 112px);
+        line-height: 0.96;
+    }
+
+    .pulsar-header p:last-child {
+        max-width: 720px;
+        margin: 16px 0 0;
+        color: var(--text-muted);
+        font-size: clamp(17px, 2vw, 22px);
+        line-height: 1.55;
+    }
+
+    .pulsar-grid {
+        display: grid;
+        grid-template-columns: minmax(280px, 38%) minmax(0, 62%);
+        gap: 24px;
+        align-items: start;
+    }
+
+    .pulsar-panel,
+    .pulsar-output,
+    .pulsar-stat {
+        border: 1px solid var(--border);
+        border-radius: var(--radius-card);
+        background: var(--bg-card);
+    }
+
+    .pulsar-panel {
+        position: sticky;
+        top: 98px;
+        min-height: 620px;
+        padding: 32px;
+    }
+
+    .pulsar-kicker {
+        margin: 0 0 22px;
+        color: var(--text-muted);
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+
+    .pulsar-form {
+        display: grid;
+        gap: 28px;
+    }
+
+    .theme-stack {
+        display: grid;
+        gap: 12px;
+    }
+
+    .theme-card {
+        position: relative;
+        display: grid;
+        grid-template-columns: 40px 1fr;
+        gap: 14px;
+        align-items: center;
+        min-height: 82px;
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-left: 4px solid transparent;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.035);
+        cursor: pointer;
+        transition: border-color 180ms ease, background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .theme-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(124, 58, 237, 0.34);
+    }
+
+    .theme-card input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .theme-card:has(input:checked) {
+        border-left-color: var(--accent);
+        background: rgba(255, 255, 255, 0.07);
+        box-shadow: 0 0 24px rgba(124, 58, 237, 0.16);
+    }
+
+    .theme-swatch {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .theme-ocean { background: linear-gradient(135deg, #1f7a8c, #3dd6d0); }
+    .theme-sunset { background: linear-gradient(135deg, #e76f51, #f7d060); }
+    .theme-forest { background: linear-gradient(135deg, #2d6a4f, #95d5b2); }
+
+    .theme-card strong,
+    .theme-card span {
+        display: block;
+    }
+
+    .theme-card strong {
+        color: #ffffff;
+        font-size: 16px;
+    }
+
+    .theme-card span {
+        margin-top: 4px;
+        color: var(--text-muted);
+        font-size: 13px;
+        line-height: 1.35;
+    }
+
+    .pulsar-range {
+        display: grid;
+        gap: 10px;
+    }
+
+    .range-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    .range-row strong {
+        color: var(--accent);
+    }
+
+    .pulsar-range input {
+        width: 100%;
+        accent-color: var(--accent);
+    }
+
+    .range-help {
+        margin: -2px 0 0;
+        color: var(--text-muted);
+        font-size: 12px;
+    }
+
+    .pulsar-submit {
+        min-height: 52px;
+        width: 100%;
+        border: 0;
+        border-radius: var(--radius-pill);
+        color: #ffffff;
+        background: var(--accent);
+        font-weight: 900;
+        cursor: pointer;
+        transition: filter 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .pulsar-submit:hover {
+        filter: brightness(1.12);
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .pulsar-submit.is-loading {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        pointer-events: none;
+    }
+
+    .pulsar-spinner {
+        width: 18px;
+        height: 18px;
+        border: 3px solid rgba(255, 255, 255, 0.32);
+        border-top-color: #ffffff;
+        border-radius: 50%;
+        animation: pulsar-spin 700ms linear infinite;
+    }
+
+    @keyframes pulsar-spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .pulsar-output {
+        overflow: hidden;
+    }
+
+    .pulsar-image-frame {
+        position: relative;
+        display: grid;
+        place-items: center;
+        min-height: 520px;
+        overflow: hidden;
+        background: #0d0d0d;
+    }
+
+    .pulsar-image-frame img {
+        display: block;
+        width: 100%;
+        max-height: 650px;
+        object-fit: contain;
+        background: #0d0d0d;
+    }
+
+    .wave-placeholder {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 100%;
+        min-height: 520px;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at 50% 22%, rgba(124, 58, 237, 0.16), transparent 34%),
+            #0d0d0d;
+    }
+
+    .wave-placeholder span {
+        position: absolute;
+        left: -10%;
+        width: 120%;
+        height: 2px;
+        border-radius: var(--radius-pill);
+        background: rgba(124, 58, 237, 0.26);
+        transform-origin: center;
+        animation: idle-wave 4.8s ease-in-out infinite;
+    }
+
+    .wave-placeholder span:nth-child(1) { top: 24%; opacity: 0.34; animation-delay: -0.2s; }
+    .wave-placeholder span:nth-child(2) { top: 34%; opacity: 0.44; animation-delay: -0.8s; }
+    .wave-placeholder span:nth-child(3) { top: 45%; opacity: 0.54; animation-delay: -1.4s; }
+    .wave-placeholder span:nth-child(4) { top: 57%; opacity: 0.42; animation-delay: -2s; }
+    .wave-placeholder span:nth-child(5) { top: 69%; opacity: 0.30; animation-delay: -2.6s; }
+
+    .wave-placeholder strong {
+        z-index: 1;
+        max-width: 320px;
+        color: var(--text-muted);
+        font-weight: 800;
+        text-align: center;
+    }
+
+    @keyframes idle-wave {
+        0%, 100% { transform: translateX(-2%) scaleY(1) rotate(-1deg); box-shadow: 0 0 20px rgba(124, 58, 237, 0.18); }
+        50% { transform: translateX(2%) scaleY(4) rotate(1deg); box-shadow: 0 0 36px rgba(124, 58, 237, 0.28); }
+    }
+
+    .pulsar-download-row {
+        display: flex;
+        justify-content: flex-end;
+        padding: 18px;
+        border-top: 1px solid var(--border);
+    }
+
+    .pulsar-download {
+        min-height: 46px;
+        border: 1px solid rgba(124, 58, 237, 0.74);
+        border-radius: var(--radius-pill);
+        padding: 0 24px;
+        color: #ffffff;
+        background: rgba(124, 58, 237, 0.12);
+        font-weight: 800;
+        cursor: pointer;
+        transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .pulsar-download:hover {
+        transform: translateY(-2px);
+        background: rgba(124, 58, 237, 0.22);
+        box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .pulsar-stats {
+        display: flex;
+        gap: 12px;
+        margin-top: 18px;
+    }
+
+    .pulsar-stat {
+        flex: 1 1 0;
+        display: grid;
+        justify-items: center;
+        gap: 6px;
+        min-width: 0;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .stat-icon {
+        font-size: 24px;
+        line-height: 1;
+    }
+
+    .stat-label {
+        color: var(--text-muted);
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .stat-value {
+        color: #ffffff;
+        font-size: clamp(26px, 3vw, 38px);
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    .stat-unit {
+        color: var(--text-muted);
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+        .pulsar-page {
+            padding-inline: 16px;
+        }
+
+        .pulsar-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .pulsar-panel {
+            position: static;
+            min-height: 0;
+            padding: 24px;
+        }
+
+        .pulsar-image-frame,
+        .wave-placeholder {
+            min-height: 360px;
+        }
+
+        .pulsar-stats {
+            flex-wrap: wrap;
+        }
+
+        .pulsar-stat {
+            flex-basis: calc(50% - 6px);
+        }
+    }
+
+    @media (max-width: 560px) {
+        .pulsar-stat {
+            flex-basis: 100%;
+        }
+    }
+</style>
+
+<main class="pulsar-page">
+    <section class="pulsar-header">
+        <p class="pulsar-breadcrumb">Studio / Pulsar</p>
         <h1>Pulsar</h1>
         <p>Weather rhythms turned into abstract landscapes.</p>
     </section>
 
-    <section class="workspace-grid shell">
-        <aside class="control-panel">
-            <form action="{{ url_for('generate_data_art_route') }}" method="POST" class="controls">
-                <div class="field-group">
-                    <span class="field-label">Theme</span>
-                    <div class="option-grid theme-options">
-                        {% for theme in themes %}
-                            <label class="swatch-option theme-{{ theme }}">
-                                <input type="radio" name="theme" value="{{ theme }}" {% if theme == selected_theme %}checked{% endif %}>
-                                <span class="swatch-strip" aria-hidden="true"></span>
+    <section class="pulsar-grid">
+        <aside class="pulsar-panel">
+            <p class="pulsar-kicker">Parameters</p>
+
+            <form class="pulsar-form" action="/generate-data-art" method="POST" id="pulsarForm">
+                <input type="hidden" name="theme" id="themeInput" value="{{ selected_theme }}">
+
+                <div class="theme-stack" aria-label="Theme selector">
+                    {% for theme in themes %}
+                        <label class="theme-card">
+                            <input type="radio" name="theme_choice" value="{{ theme }}" {% if theme == selected_theme %}checked{% endif %}>
+                            <span class="theme-swatch theme-{{ theme }}" aria-hidden="true"></span>
+                            <span>
                                 <strong>{{ theme|capitalize }}</strong>
-                            </label>
-                        {% endfor %}
-                    </div>
+                                {% if theme == "ocean" %}
+                                    <span>Deep currents and coastal rhythm</span>
+                                {% elif theme == "sunset" %}
+                                    <span>Warm horizons and fading light</span>
+                                {% elif theme == "forest" %}
+                                    <span>Moss, rain, and ancient canopy</span>
+                                {% endif %}
+                            </span>
+                        </label>
+                    {% endfor %}
                 </div>
 
-                <label class="control-row" for="days">
-                    <span>Days <strong data-range-value="days">{{ days }}</strong></span>
+                <label class="pulsar-range" for="days">
+                    <span class="range-row">
+                        <span>Dataset period</span>
+                        <strong><span id="daysValue">{{ days }}</span> days</strong>
+                    </span>
                     <input type="range" id="days" name="days" min="20" max="90" value="{{ days }}" step="5">
                 </label>
 
-                <label class="control-row" for="density">
-                    <span>Density <strong data-range-value="density">{{ density }}</strong></span>
+                <label class="pulsar-range" for="density">
+                    <span class="range-row">
+                        <span>Wave density</span>
+                        <strong id="densityValue">{{ density }}</strong>
+                    </span>
                     <input type="range" id="density" name="density" min="3" max="12" value="{{ density }}" step="1">
+                    <span class="range-help">Higher density adds more layered waves</span>
                 </label>
 
-                <button type="submit" class="submit-btn" data-loading-text="Generating">Generate</button>
+                <button class="pulsar-submit" type="submit" id="pulsarSubmit">Generate</button>
             </form>
         </aside>
 
-        <section class="output-panel">
-            <div class="output-frame">
+        <section>
+            <div class="pulsar-output">
+                <div class="pulsar-image-frame">
+                    {% if artwork %}
+                        <img id="pulsarArtwork" src="data:image/png;base64,{{ artwork }}" alt="Generated Pulsar data artwork">
+                    {% else %}
+                        <div class="wave-placeholder">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <strong>Select parameters and render your landscape</strong>
+                        </div>
+                    {% endif %}
+                </div>
+
                 {% if artwork %}
-                    <img src="data:image/png;base64,{{ artwork }}" alt="Generated Pulsar data artwork">
-                {% else %}
-                    <div class="empty-state">
-                        <strong>Awaiting weather rhythm</strong>
-                        <span>Select a theme and render an abstract landscape.</span>
+                    <div class="pulsar-download-row">
+                        <button class="pulsar-download" type="button" data-download-target="pulsarArtwork" data-filename="pulsar-data-art.png">Download PNG</button>
                     </div>
                 {% endif %}
             </div>
 
-            {% if artwork %}
-                <a class="download-link" href="data:image/png;base64,{{ artwork }}" download="pulsar-data-art.png">Download PNG</a>
-            {% endif %}
-
             {% if stats %}
-                <div class="stats-grid">
-                    <article>
-                        <strong>{{ stats.days }}</strong>
-                        <span>Days</span>
+                <div class="pulsar-stats">
+                    <article class="pulsar-stat">
+                        <span class="stat-icon">📅</span>
+                        <span class="stat-label">Period</span>
+                        <strong class="stat-value">{{ stats.days }}</strong>
+                        <span class="stat-unit">days</span>
                     </article>
-                    <article>
-                        <strong>{{ stats.avg_temperature }}</strong>
-                        <span>Avg Temp</span>
+                    <article class="pulsar-stat">
+                        <span class="stat-icon">🌡️</span>
+                        <span class="stat-label">Avg Temp</span>
+                        <strong class="stat-value">{{ stats.avg_temperature }}</strong>
+                        <span class="stat-unit">°C</span>
                     </article>
-                    <article>
-                        <strong>{{ stats.avg_humidity }}</strong>
-                        <span>Avg Humidity</span>
+                    <article class="pulsar-stat">
+                        <span class="stat-icon">💧</span>
+                        <span class="stat-label">Humidity</span>
+                        <strong class="stat-value">{{ stats.avg_humidity }}</strong>
+                        <span class="stat-unit">%</span>
                     </article>
-                    <article>
-                        <strong>{{ stats.avg_wind }}</strong>
-                        <span>Avg Wind</span>
+                    <article class="pulsar-stat">
+                        <span class="stat-icon">💨</span>
+                        <span class="stat-label">Wind</span>
+                        <strong class="stat-value">{{ stats.avg_wind }}</strong>
+                        <span class="stat-unit">km/h</span>
                     </article>
                 </div>
             {% endif %}
         </section>
     </section>
 </main>
+
+<script>
+    const themeInput = document.getElementById("themeInput");
+    const themeChoices = document.querySelectorAll("input[name='theme_choice']");
+    const days = document.getElementById("days");
+    const daysValue = document.getElementById("daysValue");
+    const density = document.getElementById("density");
+    const densityValue = document.getElementById("densityValue");
+    const pulsarForm = document.getElementById("pulsarForm");
+    const pulsarSubmit = document.getElementById("pulsarSubmit");
+
+    themeChoices.forEach((choice) => {
+        choice.addEventListener("change", () => {
+            themeInput.value = choice.value;
+        });
+    });
+
+    days.addEventListener("input", () => {
+        daysValue.textContent = days.value;
+    });
+
+    density.addEventListener("input", () => {
+        densityValue.textContent = density.value;
+    });
+
+    pulsarForm.addEventListener("submit", () => {
+        pulsarSubmit.classList.add("is-loading", "loading");
+        pulsarSubmit.innerHTML = '<span class="pulsar-spinner"></span><span>Rendering landscape...</span>';
+    });
+
+    document.querySelectorAll("[data-download-target]").forEach((button) => {
+        button.addEventListener("click", () => {
+            const image = document.getElementById(button.dataset.downloadTarget);
+            if (!image) return;
+
+            const link = document.createElement("a");
+            link.href = image.src;
+            link.download = button.dataset.filename;
+            link.click();
+        });
+    });
+</script>
 {% endblock %}
