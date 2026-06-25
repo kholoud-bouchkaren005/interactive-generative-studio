@@ -2,9 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Interactive Generative Studio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body class="page">
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('home') }}">Interactive Generative Studio</a>
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('generative') }}">Axe 1</a>
+            <a href="{{ url_for('data_art') }}">Axe 2</a>
+            <a href="{{ url_for('upload') }}">Axe 3</a>
+            <a href="{{ url_for('canvas') }}">Axe 4</a>
+            <a href="{{ url_for('ml_palette') }}">Axe 6</a>
+        </nav>
+    </header>
 
+    <main class="gallery-shell">
+        <section class="intro compact">
+            <p class="eyebrow">Axe 5</p>
+            <h1>Studio Gallery</h1>
+            <p class="lead">A responsive gallery page for browsing generated outputs and module previews.</p>
+        </section>
+
+        <section class="gallery-grid">
+            {% for module in modules %}
+                <article class="gallery-card">
+                    <div class="thumb thumb-{{ loop.index }}"></div>
+                    <div>
+                        <span>{{ module.axe }}</span>
+                        <h2>{{ module.title }}</h2>
+                        <p>{{ module.description }}</p>
+                        <a href="{{ url_for(module.route) }}">Open module</a>
+                    </div>
+                </article>
+            {% endfor %}
+        </section>
+    </main>
 </body>
 </html>
