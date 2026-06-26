@@ -9,6 +9,12 @@ Interactive Generative Studio is a Flask web application for the ENSA Digital Cr
 - README with installation steps and explanations: this file.
 - 2-3 page report: see `REPORT.md`.
 
+GitHub repository:
+
+```text
+https://github.com/kholoud-bouchkaren005/interactive-generative-studio
+```
+
 ## Team Members and Contributions
 
 - Nihal: Axe 1 - Generative Art, Axe 2 - Pulsar Generative Animation.
@@ -16,6 +22,12 @@ Interactive Generative Studio is a Flask web application for the ENSA Digital Cr
 - Ghizlane: Axe 4 - Interactivity Module, Axe 6 - ML Color Extraction Bonus.
 
 ## Installation
+
+Recommended Python version:
+
+```text
+Python 3.11
+```
 
 Create and activate a virtual environment:
 
@@ -29,6 +41,8 @@ Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
+
+If there are dependency problems, check that the virtual environment is activated and that all team members are using the same dependency list from `requirements.txt`.
 
 Run the application:
 
@@ -206,6 +220,42 @@ interactive-generative-studio/
 - Matplotlib for generative animation frame rendering.
 - scikit-learn KMeans for ML color extraction.
 - HTML, CSS, and JavaScript for frontend interaction.
+
+## Technical Pipeline
+
+1. The user opens the Flask web application from the browser.
+2. The user selects a module from the dashboard.
+3. The frontend sends form data, uploaded files, or canvas actions.
+4. Flask receives the request through the corresponding route.
+5. The selected Python module processes the input.
+6. The result is returned as an image, GIF, JSON response, or rendered HTML page.
+7. The browser displays the final creative result and allows download when available.
+
+## GitHub Workflow
+
+The team used GitHub to organize and merge the work. Each major axis was developed on a dedicated branch, then merged progressively into the main application.
+
+Main branches used during the project:
+
+- `axe1-GenArtStudio`
+- `axe2-data-art`
+- `axe3-GenArtStudio`
+- `axe4-ghizlane`
+- `axe5-web-integration`
+- `feature/kholoud`
+- `feature/forma-redesign`
+- `main`
+
+This workflow helped separate responsibilities, test modules independently, and combine the final version through pull requests and merges.
+
+## Challenges and Solutions
+
+- GitHub collaboration was difficult at the beginning because of branches, pull requests, and merge conflicts. The solution was to organize the work by axes and merge changes progressively.
+- Team members had different Python versions, including Python 3.11 and Python 3.14. This caused dependency issues, so the project uses a shared `requirements.txt` file and a virtual environment.
+- Different development tools were used, mainly Visual Studio Code and PyCharm. To avoid committing local IDE settings, `.gitignore` excludes files such as `.idea`, cache folders, and virtual environment folders.
+- Generated images and animations needed to be displayed in the browser. The solution was to generate images in memory and return them as Base64 images or downloadable GIF files.
+- The animation module can become heavy when the duration, FPS, waves, and particles are high. The interface provides controls to balance quality and generation time.
+- Combining all axes into one app required a clean route structure. The final solution uses a central `app.py` file and separate module folders for the processing logic.
 
 ## Notes
 
