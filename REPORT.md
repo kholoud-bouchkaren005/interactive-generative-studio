@@ -125,16 +125,49 @@ The general technical pipeline is:
 
 ## 4. Challenges and Solutions
 
-One challenge was keeping the project modular. Since each axis has different requirements, the code was separated into routes, templates, and module folders. This makes it easier to maintain and merge the work of different teammates.
+One of the first challenges was GitHub collaboration. At the beginning, the team had difficulties with branches, pull requests, merge conflicts, and keeping the same project version on all computers. The solution was to organize the work by axes, create separate branches for each part, and merge the work progressively into the main project after resolving conflicts.
 
-Another challenge was displaying generated images without creating many temporary files. The solution was to generate images in memory and encode them as Base64 PNG strings. This allows images to appear directly in the web page and be downloaded by the user.
+Another important constraint was the difference between local development environments. Some team members installed Python 3.11, while others used Python 3.14. This created dependency and compatibility problems, especially with libraries such as Flask, Pillow, NumPy, Pandas, Matplotlib, and scikit-learn. The solution was to use a shared `requirements.txt` file and a virtual environment so the project could be installed with the same packages on every machine.
+
+The team also used different code editors. Some members worked with Visual Studio Code, while others used PyCharm. This sometimes created different project settings and hidden IDE files. To solve this, the project used `.gitignore` to avoid committing personal IDE folders such as `.idea`, cache files, and virtual environment files.
+
+Keeping the project modular was also a challenge. Since each axis has different requirements, the code was separated into routes, templates, and module folders. This makes it easier to maintain and merge the work of different teammates.
+
+Another technical challenge was displaying generated images without creating many temporary files. The solution was to generate images in memory and encode them as Base64 PNG strings. This allows images to appear directly in the web page and be downloaded by the user.
 
 For the interactive canvas, the challenge was keeping drawing responsive while supporting several controls. The solution was to store shapes in JavaScript objects and redraw them inside an animation loop.
 
 For the ML color extraction, the challenge was making the method simple but meaningful. K-means clustering was chosen because it is understandable, fast enough for small images, and produces useful creative palettes.
 
-Finally, combining all modules into one Flask application required a clean route structure. A central `app.py` file was used to connect all pages, while each module keeps its own processing code in a dedicated folder.
+The animation module also required performance control. Generating animated GIFs can become slow when the number of frames, particles, and layers is high. To manage this, the interface includes parameters such as duration, FPS, wave layers, and particle count, so the user can balance visual quality and generation time.
+
+Finally, combining all modules into one Flask application required a clean route structure. A central `app.py` file was used to connect all pages, while each module keeps its own processing code in a dedicated folder. This reduced duplicated routes and made the final application easier to present.
 
 ## Conclusion
 
 Interactive Generative Studio demonstrates how Python can support creative coding in several forms: generative visuals, artistic data transformation, media editing, real-time interaction, and machine-learning-assisted color design. The result is a modular Flask application that is ready for presentation and future extension.
+
+## Final Deliverables
+
+The final submission includes all required project deliverables:
+
+1. Complete code base
+
+   The full source code is available in the GitHub repository: `https://github.com/kholoud-bouchkaren005/interactive-generative-studio`. It includes the Flask entry point, module files, templates, static assets, README, report, and dependency list.
+
+2. Fully working Flask app
+
+   The application runs with `python app.py` and provides a complete web interface for all implemented axes. Each module is accessible through its own route and connected through the main dashboard.
+
+3. README with installation steps and explanations
+
+   The repository includes a `README.md` file containing setup instructions, dependency installation, run commands, route descriptions, module explanations, project structure, and tools used.
+
+4. Two-to-three page report
+
+   This report covers the required elements:
+
+   - Concept and artistic direction.
+   - All implemented modules.
+   - Tools used and technical pipeline.
+   - Challenges and solutions.
