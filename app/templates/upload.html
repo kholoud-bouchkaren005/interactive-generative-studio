@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Lens - Studio{% endblock %}
+{% block title %}Styler - Studio{% endblock %}
 
 {% block content %}
 <main class="module-page">
     <section class="module-header shell">
-        <p class="breadcrumb">Studio / Lens</p>
-        <h1>Lens</h1>
-        <p>Upload, transform, and download creative filters.</p>
+        <p class="breadcrumb">Studio / Styler</p>
+        <h1>Styler</h1>
+        <p>Upload one image, then switch between styles without uploading it again.</p>
     </section>
 
     <section class="workspace-grid shell">
@@ -18,12 +18,16 @@
 
             <form action="{{ url_for('apply_image_effect_route') }}" method="POST" enctype="multipart/form-data" class="controls">
                 <label class="drop-zone" for="lensImage">
-                    <input type="file" id="lensImage" name="image" accept="image/*" required data-preview-target="lensPreview">
-                    <span>Drop image here or browse</span>
-                    <small>PNG, JPG, or WEBP</small>
+                    <input type="file" id="lensImage" name="image" accept="image/*" data-preview-target="lensPreview">
+                    <span>{% if saved_image %}Change saved image{% else %}Choose an image{% endif %}</span>
+                    <small>{% if saved_image %}You can now change filters without uploading again{% else %}PNG, JPG, or WEBP{% endif %}</small>
                 </label>
 
-                <div id="lensPreview" class="upload-preview"></div>
+                <div id="lensPreview" class="upload-preview">
+                    {% if saved_image %}
+                        <img src="data:image/png;base64,{{ saved_image }}" alt="Saved Styler source">
+                    {% endif %}
+                </div>
 
                 <div class="field-group">
                     <span class="field-label">Effect</span>
@@ -42,7 +46,9 @@
                     <input type="range" id="strength" name="strength" min="1" max="12" value="{{ strength }}" step="1">
                 </label>
 
-                <button type="submit" class="submit-btn" data-loading-text="Applying">Apply Effect</button>
+                <button type="submit" class="submit-btn" data-loading-text="Applying">
+                    {% if saved_image %}Apply to saved image{% else %}Apply Effect{% endif %}
+                </button>
             </form>
         </aside>
 

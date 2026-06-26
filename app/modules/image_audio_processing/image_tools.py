@@ -10,9 +10,19 @@ def image_to_base64(image):
     return base64.b64encode(buffer.getvalue()).decode("ascii")
 
 
-def apply_image_effect(image_file, effect="grayscale", strength=4):
+def load_image_source(image_source):
+    if isinstance(image_source, Image.Image):
+        return image_source.convert("RGB")
+    return Image.open(image_source).convert("RGB")
+
+
+def image_from_base64(encoded_image):
+    return Image.open(BytesIO(base64.b64decode(encoded_image))).convert("RGB")
+
+
+def apply_image_effect(image_source, effect="grayscale", strength=4):
     strength = max(1, min(int(strength), 12))
-    image = Image.open(image_file).convert("RGB")
+    image = load_image_source(image_source)
     image.thumbnail((1100, 760))
 
     if effect == "grayscale":
