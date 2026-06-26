@@ -8,13 +8,13 @@
         min-height: 100vh;
         padding: 64px clamp(18px, 4vw, 56px) 88px;
         background:
-            radial-gradient(circle at 16% 10%, rgba(124, 58, 237, 0.16), transparent 28%),
-            linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 260px),
+            radial-gradient(circle at 14% 12%, rgba(124, 58, 237, 0.18), transparent 28%),
+            radial-gradient(circle at 86% 18%, rgba(0, 245, 212, 0.08), transparent 24%),
             var(--bg-primary);
     }
 
     .pulsar-header {
-        margin: 0 0 34px;
+        margin-bottom: 28px;
     }
 
     .pulsar-breadcrumb {
@@ -27,81 +27,116 @@
     .pulsar-header h1 {
         margin: 0;
         color: #ffffff;
-        font-size: clamp(52px, 8vw, 112px);
-        line-height: 0.96;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: clamp(60px, 9vw, 132px);
+        line-height: 0.92;
     }
 
-    .pulsar-header p:last-child {
-        max-width: 720px;
+    .pulsar-header p:last-of-type {
+        max-width: 760px;
         margin: 16px 0 0;
         color: var(--text-muted);
         font-size: clamp(17px, 2vw, 22px);
         line-height: 1.55;
     }
 
-    .pulsar-grid {
+    .pulsar-line {
+        width: 0;
+        height: 2px;
+        margin-top: 24px;
+        border-radius: var(--radius-pill);
+        background: linear-gradient(90deg, var(--accent), #00f5d4, #f72585);
+        animation: line-grow 1.5s ease forwards;
+    }
+
+    @keyframes line-grow {
+        to { width: 100%; }
+    }
+
+    .pulsar-layout {
         display: grid;
-        grid-template-columns: minmax(280px, 38%) minmax(0, 62%);
-        gap: 24px;
+        grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+        gap: 22px;
         align-items: start;
     }
 
-    .pulsar-panel,
-    .pulsar-output,
-    .pulsar-stat {
+    .control-panel,
+    .preview-panel,
+    .stat-card {
         border: 1px solid var(--border);
         border-radius: var(--radius-card);
         background: var(--bg-card);
     }
 
-    .pulsar-panel {
+    .control-panel {
         position: sticky;
-        top: 98px;
-        min-height: 620px;
-        padding: 32px;
-    }
-
-    .pulsar-kicker {
-        margin: 0 0 22px;
-        color: var(--text-muted);
-        font-size: 12px;
-        font-weight: 900;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
+        top: 92px;
+        max-height: calc(100vh - 116px);
+        overflow-y: auto;
+        padding: 20px;
     }
 
     .pulsar-form {
         display: grid;
-        gap: 28px;
+        gap: 14px;
     }
 
-    .theme-stack {
+    .control-section {
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.025);
+    }
+
+    .control-section summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 48px;
+        padding: 0 16px;
+        color: #ffffff;
+        font-weight: 900;
+        cursor: pointer;
+        list-style: none;
+    }
+
+    .control-section summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .control-section summary::after {
+        content: ">";
+        color: var(--text-muted);
+        transition: transform 180ms ease;
+    }
+
+    .control-section[open] summary::after {
+        transform: rotate(90deg);
+    }
+
+    .section-body {
         display: grid;
-        gap: 12px;
+        gap: 14px;
+        padding: 0 16px 16px;
     }
 
     .theme-card {
         position: relative;
         display: grid;
-        grid-template-columns: 40px 1fr;
-        gap: 14px;
+        grid-template-columns: 50px 1fr;
+        gap: 12px;
         align-items: center;
-        min-height: 82px;
-        padding: 16px;
+        min-height: 70px;
+        padding: 12px;
         border: 1px solid var(--border);
         border-left: 4px solid transparent;
-        border-radius: 14px;
+        border-radius: 12px;
         background: rgba(255, 255, 255, 0.035);
         cursor: pointer;
-        transition: border-color 180ms ease, background 180ms ease, transform 180ms ease, box-shadow 180ms ease;
     }
 
-    .theme-card:hover {
-        transform: translateY(-2px);
-        border-color: rgba(124, 58, 237, 0.34);
-    }
-
-    .theme-card input {
+    .theme-card input,
+    .pill-choice input {
         position: absolute;
         opacity: 0;
         pointer-events: none;
@@ -109,20 +144,22 @@
 
     .theme-card:has(input:checked) {
         border-left-color: var(--accent);
-        background: rgba(255, 255, 255, 0.07);
+        background: rgba(255, 255, 255, 0.08);
         box-shadow: 0 0 24px rgba(124, 58, 237, 0.16);
     }
 
     .theme-swatch {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        width: 50px;
+        height: 30px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
     }
 
-    .theme-ocean { background: linear-gradient(135deg, #1f7a8c, #3dd6d0); }
-    .theme-sunset { background: linear-gradient(135deg, #e76f51, #f7d060); }
-    .theme-forest { background: linear-gradient(135deg, #2d6a4f, #95d5b2); }
+    .theme-aurora { background: linear-gradient(135deg, #3dd6d0, #8a5cf6, #ff7aa2); }
+    .theme-sunset { background: linear-gradient(135deg, #f72585, #ff7a00, #ffd166); }
+    .theme-forest { background: linear-gradient(135deg, #2d6a4f, #95d5b2, #d8f3dc); }
+    .theme-cosmos { background: linear-gradient(135deg, #240046, #7b2fff, #ff6b6b); }
+    .theme-neon { background: linear-gradient(135deg, #00f5d4, #fee440, #f15bb5); }
 
     .theme-card strong,
     .theme-card span {
@@ -131,19 +168,18 @@
 
     .theme-card strong {
         color: #ffffff;
-        font-size: 16px;
+        font-size: 15px;
     }
 
     .theme-card span {
-        margin-top: 4px;
+        margin-top: 3px;
         color: var(--text-muted);
-        font-size: 13px;
-        line-height: 1.35;
+        font-size: 12px;
     }
 
-    .pulsar-range {
+    .range-control {
         display: grid;
-        gap: 10px;
+        gap: 8px;
     }
 
     .range-row {
@@ -151,7 +187,7 @@
         justify-content: space-between;
         gap: 16px;
         color: #ffffff;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 800;
     }
 
@@ -159,163 +195,147 @@
         color: var(--accent);
     }
 
-    .pulsar-range input {
+    .range-control input {
         width: 100%;
         accent-color: var(--accent);
     }
 
-    .range-help {
-        margin: -2px 0 0;
+    .helper-text {
+        margin: 0;
         color: var(--text-muted);
         font-size: 12px;
     }
 
-    .pulsar-submit {
-        min-height: 52px;
-        width: 100%;
-        border: 0;
-        border-radius: var(--radius-pill);
-        color: #ffffff;
-        background: var(--accent);
-        font-weight: 900;
-        cursor: pointer;
-        transition: filter 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+    .pill-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
     }
 
-    .pulsar-submit:hover {
-        filter: brightness(1.12);
-        transform: translateY(-2px);
-        box-shadow: 0 0 20px var(--accent-glow);
+    .beat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
     }
 
-    .pulsar-submit.is-loading {
-        display: inline-flex;
+    .pill-choice {
+        position: relative;
+        min-width: 0;
+    }
+
+    .pill-choice span {
+        display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
-        pointer-events: none;
-    }
-
-    .pulsar-spinner {
-        width: 18px;
-        height: 18px;
-        border: 3px solid rgba(255, 255, 255, 0.32);
-        border-top-color: #ffffff;
-        border-radius: 50%;
-        animation: pulsar-spin 700ms linear infinite;
-    }
-
-    @keyframes pulsar-spin {
-        to { transform: rotate(360deg); }
-    }
-
-    .pulsar-output {
-        overflow: hidden;
-    }
-
-    .pulsar-image-frame {
-        position: relative;
-        display: grid;
-        place-items: center;
-        min-height: 520px;
-        overflow: hidden;
-        background: #0d0d0d;
-    }
-
-    .pulsar-image-frame img {
-        display: block;
-        width: 100%;
-        max-height: 650px;
-        object-fit: contain;
-        background: #0d0d0d;
-    }
-
-    .wave-placeholder {
-        position: relative;
-        display: grid;
-        place-items: center;
-        width: 100%;
-        min-height: 520px;
-        overflow: hidden;
-        background:
-            radial-gradient(circle at 50% 22%, rgba(124, 58, 237, 0.16), transparent 34%),
-            #0d0d0d;
-    }
-
-    .wave-placeholder span {
-        position: absolute;
-        left: -10%;
-        width: 120%;
-        height: 2px;
+        gap: 6px;
+        min-height: 40px;
+        border: 1px solid var(--border);
         border-radius: var(--radius-pill);
-        background: rgba(124, 58, 237, 0.26);
-        transform-origin: center;
-        animation: idle-wave 4.8s ease-in-out infinite;
-    }
-
-    .wave-placeholder span:nth-child(1) { top: 24%; opacity: 0.34; animation-delay: -0.2s; }
-    .wave-placeholder span:nth-child(2) { top: 34%; opacity: 0.44; animation-delay: -0.8s; }
-    .wave-placeholder span:nth-child(3) { top: 45%; opacity: 0.54; animation-delay: -1.4s; }
-    .wave-placeholder span:nth-child(4) { top: 57%; opacity: 0.42; animation-delay: -2s; }
-    .wave-placeholder span:nth-child(5) { top: 69%; opacity: 0.30; animation-delay: -2.6s; }
-
-    .wave-placeholder strong {
-        z-index: 1;
-        max-width: 320px;
-        color: var(--text-muted);
-        font-weight: 800;
-        text-align: center;
-    }
-
-    @keyframes idle-wave {
-        0%, 100% { transform: translateX(-2%) scaleY(1) rotate(-1deg); box-shadow: 0 0 20px rgba(124, 58, 237, 0.18); }
-        50% { transform: translateX(2%) scaleY(4) rotate(1deg); box-shadow: 0 0 36px rgba(124, 58, 237, 0.28); }
-    }
-
-    .pulsar-download-row {
-        display: flex;
-        justify-content: flex-end;
-        padding: 18px;
-        border-top: 1px solid var(--border);
-    }
-
-    .pulsar-download {
-        min-height: 46px;
-        border: 1px solid rgba(124, 58, 237, 0.74);
-        border-radius: var(--radius-pill);
-        padding: 0 24px;
-        color: #ffffff;
-        background: rgba(124, 58, 237, 0.12);
-        font-weight: 800;
+        color: #d8d8d8;
+        background: rgba(255, 255, 255, 0.035);
+        font-size: 13px;
+        font-weight: 900;
         cursor: pointer;
-        transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
     }
 
-    .pulsar-download:hover {
-        transform: translateY(-2px);
-        background: rgba(124, 58, 237, 0.22);
+    .pill-choice input:checked + span {
+        border-color: var(--accent);
+        color: #ffffff;
+        background: var(--accent);
         box-shadow: 0 0 20px var(--accent-glow);
     }
 
-    .pulsar-stats {
+    .action-stack {
+        display: grid;
+        gap: 12px;
+        margin-top: 6px;
+    }
+
+    .render-button,
+    .download-button {
+        position: relative;
+        min-height: 52px;
+        width: 100%;
+        overflow: hidden;
+        border-radius: var(--radius-pill);
+        font-weight: 900;
+        cursor: pointer;
+    }
+
+    .render-button {
+        border: 0;
+        color: #ffffff;
+        background: var(--accent);
+    }
+
+    .render-button.is-rendering::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.32), transparent);
+        animation: sweep 1.05s linear infinite;
+    }
+
+    @keyframes sweep {
+        from { transform: translateX(-100%); }
+        to { transform: translateX(100%); }
+    }
+
+    .download-button {
+        border: 1px solid rgba(124, 58, 237, 0.82);
+        color: #ffffff;
+        background: transparent;
+    }
+
+    .download-button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    .preview-panel {
+        overflow: hidden;
+        min-height: 500px;
+        background: #070b14;
+    }
+
+    .preview-panel canvas,
+    .preview-panel img {
+        display: block;
+        width: 100%;
+        min-height: 500px;
+        object-fit: contain;
+    }
+
+    .generated-gif {
+        border: 1px solid var(--accent);
+        border-radius: var(--radius-card);
+        animation: pulse-border 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse-border {
+        0%, 100% { border-color: #7c3aed; box-shadow: 0 0 22px rgba(124, 58, 237, 0.28); }
+        33% { border-color: #00f5d4; box-shadow: 0 0 22px rgba(0, 245, 212, 0.2); }
+        66% { border-color: #f72585; box-shadow: 0 0 22px rgba(247, 37, 133, 0.22); }
+    }
+
+    .stats-row {
         display: flex;
+        flex-wrap: wrap;
         gap: 12px;
         margin-top: 18px;
     }
 
-    .pulsar-stat {
-        flex: 1 1 0;
+    .stat-card {
+        flex: 1 1 130px;
         display: grid;
+        gap: 4px;
         justify-items: center;
-        gap: 6px;
-        min-width: 0;
-        padding: 20px;
+        padding: 18px 14px;
         text-align: center;
     }
 
-    .stat-icon {
-        font-size: 24px;
-        line-height: 1;
+    .stat-card span:first-child {
+        font-size: 22px;
     }
 
     .stat-label {
@@ -328,49 +348,22 @@
 
     .stat-value {
         color: #ffffff;
-        font-size: clamp(26px, 3vw, 38px);
+        font-size: 22px;
         font-weight: 900;
-        line-height: 1;
     }
 
-    .stat-unit {
-        color: var(--text-muted);
-        font-size: 13px;
-        font-weight: 700;
-    }
-
-    @media (max-width: 900px) {
+    @media (max-width: 940px) {
         .pulsar-page {
             padding-inline: 16px;
         }
 
-        .pulsar-grid {
+        .pulsar-layout {
             grid-template-columns: 1fr;
         }
 
-        .pulsar-panel {
+        .control-panel {
             position: static;
-            min-height: 0;
-            padding: 24px;
-        }
-
-        .pulsar-image-frame,
-        .wave-placeholder {
-            min-height: 360px;
-        }
-
-        .pulsar-stats {
-            flex-wrap: wrap;
-        }
-
-        .pulsar-stat {
-            flex-basis: calc(50% - 6px);
-        }
-    }
-
-    @media (max-width: 560px) {
-        .pulsar-stat {
-            flex-basis: 100%;
+            max-height: none;
         }
     }
 </style>
@@ -379,106 +372,153 @@
     <section class="pulsar-header">
         <p class="pulsar-breadcrumb">Studio / Pulsar</p>
         <h1>Pulsar</h1>
-        <p>Weather rhythms turned into abstract landscapes.</p>
+        <p>Generative animation. Data turned into a living visual rhythm.</p>
+        <div class="pulsar-line" aria-hidden="true"></div>
     </section>
 
-    <section class="pulsar-grid">
-        <aside class="pulsar-panel">
-            <p class="pulsar-kicker">Parameters</p>
-
+    <section class="pulsar-layout">
+        <aside class="control-panel">
             <form class="pulsar-form" action="/generate-data-art" method="POST" id="pulsarForm">
-                <input type="hidden" name="theme" id="themeInput" value="{{ selected_theme }}">
+                <details class="control-section" open>
+                    <summary>Theme</summary>
+                    <div class="section-body">
+                        {% for theme in themes %}
+                            <label class="theme-card">
+                                <input type="radio" name="theme" value="{{ theme }}" {% if theme == selected_theme %}checked{% endif %}>
+                                <span class="theme-swatch theme-{{ theme }}" aria-hidden="true"></span>
+                                <span>
+                                    <strong>{{ theme|capitalize }}</strong>
+                                    {% if theme == "aurora" %}
+                                        <span>Bioluminescent depths</span>
+                                    {% elif theme == "sunset" %}
+                                        <span>Cosmic explosion</span>
+                                    {% elif theme == "forest" %}
+                                        <span>Ancient mandala</span>
+                                    {% elif theme == "cosmos" %}
+                                        <span>Nebula drift</span>
+                                    {% elif theme == "neon" %}
+                                        <span>Digital pulse</span>
+                                    {% endif %}
+                                </span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                </details>
 
-                <div class="theme-stack" aria-label="Theme selector">
-                    {% for theme in themes %}
-                        <label class="theme-card">
-                            <input type="radio" name="theme_choice" value="{{ theme }}" {% if theme == selected_theme %}checked{% endif %}>
-                            <span class="theme-swatch theme-{{ theme }}" aria-hidden="true"></span>
-                            <span>
-                                <strong>{{ theme|capitalize }}</strong>
-                                {% if theme == "ocean" %}
-                                    <span>Deep currents and coastal rhythm</span>
-                                {% elif theme == "sunset" %}
-                                    <span>Warm horizons and fading light</span>
-                                {% elif theme == "forest" %}
-                                    <span>Moss, rain, and ancient canopy</span>
-                                {% endif %}
+                <details class="control-section" open>
+                    <summary>Timing</summary>
+                    <div class="section-body">
+                        <label class="range-control" for="duration">
+                            <span class="range-row">
+                                <span>Duration</span>
+                                <strong><span data-value-for="duration">{{ duration }}</span> sec</strong>
                             </span>
+                            <input type="range" id="duration" name="duration" min="3" max="12" value="{{ duration }}" step="1">
                         </label>
-                    {% endfor %}
+
+                        <label class="range-control" for="fps">
+                            <span class="range-row">
+                                <span>Frame rate</span>
+                                <strong><span data-value-for="fps">{{ fps }}</span> fps</strong>
+                            </span>
+                            <input type="range" id="fps" name="fps" min="12" max="30" value="{{ fps }}" step="1">
+                            <span class="helper-text">Higher FPS = smoother but larger file</span>
+                        </label>
+                    </div>
+                </details>
+
+                <details class="control-section" open>
+                    <summary>Motion</summary>
+                    <div class="section-body">
+                        <label class="range-control" for="wave_layers">
+                            <span class="range-row">
+                                <span>Wave layers</span>
+                                <strong data-value-for="wave_layers">{{ wave_layers }}</strong>
+                            </span>
+                            <input type="range" id="wave_layers" name="wave_layers" min="2" max="10" value="{{ wave_layers }}" step="1">
+                        </label>
+
+                        <label class="range-control" for="particle_count">
+                            <span class="range-row">
+                                <span>Particles</span>
+                                <strong data-value-for="particle_count">{{ particle_count }}</strong>
+                            </span>
+                            <input type="range" id="particle_count" name="particle_count" min="20" max="200" value="{{ particle_count }}" step="5">
+                        </label>
+
+                        <label class="range-control" for="color_speed">
+                            <span class="range-row">
+                                <span>Color speed</span>
+                                <strong><span data-value-for="color_speed">{{ color_speed }}</span>&times;</strong>
+                            </span>
+                            <input type="range" id="color_speed" name="color_speed" min="0.5" max="3.0" value="{{ color_speed }}" step="0.1">
+                        </label>
+
+                        <label class="range-control" for="morph_intensity">
+                            <span class="range-row">
+                                <span>Morph intensity</span>
+                                <strong><span data-value-for="morph_intensity">{{ morph_intensity }}</span>&times;</strong>
+                            </span>
+                            <input type="range" id="morph_intensity" name="morph_intensity" min="0.5" max="2.0" value="{{ morph_intensity }}" step="0.1">
+                        </label>
+                    </div>
+                </details>
+
+                <details class="control-section" open>
+                    <summary>Structure</summary>
+                    <div class="section-body">
+                        <div class="pill-grid">
+                            <label class="pill-choice"><input type="radio" name="symmetry" value="1" {% if symmetry == 1 %}checked{% endif %}><span>None</span></label>
+                            <label class="pill-choice"><input type="radio" name="symmetry" value="2" {% if symmetry == 2 %}checked{% endif %}><span>Mirror</span></label>
+                            <label class="pill-choice"><input type="radio" name="symmetry" value="4" {% if symmetry == 4 %}checked{% endif %}><span>Quad</span></label>
+                            <label class="pill-choice"><input type="radio" name="symmetry" value="6" {% if symmetry == 6 %}checked{% endif %}><span>Hex</span></label>
+                        </div>
+
+                        <div class="beat-grid">
+                            <label class="pill-choice"><input type="radio" name="beat_mode" value="smooth" {% if beat_mode == "smooth" %}checked{% endif %}><span>&#8767; Smooth</span></label>
+                            <label class="pill-choice"><input type="radio" name="beat_mode" value="pulse" {% if beat_mode == "pulse" %}checked{% endif %}><span>&#9830; Pulse</span></label>
+                            <label class="pill-choice"><input type="radio" name="beat_mode" value="chaos" {% if beat_mode == "chaos" %}checked{% endif %}><span>&#8779; Chaos</span></label>
+                        </div>
+                    </div>
+                </details>
+
+                <div class="action-stack">
+                    <button class="render-button" type="submit" id="renderButton">Generate</button>
                 </div>
+            </form>
 
-                <label class="pulsar-range" for="days">
-                    <span class="range-row">
-                        <span>Dataset period</span>
-                        <strong><span id="daysValue">{{ days }}</span> days</strong>
-                    </span>
-                    <input type="range" id="days" name="days" min="20" max="90" value="{{ days }}" step="5">
-                </label>
-
-                <label class="pulsar-range" for="density">
-                    <span class="range-row">
-                        <span>Wave density</span>
-                        <strong id="densityValue">{{ density }}</strong>
-                    </span>
-                    <input type="range" id="density" name="density" min="3" max="12" value="{{ density }}" step="1">
-                    <span class="range-help">Higher density adds more layered waves</span>
-                </label>
-
-                <button class="pulsar-submit" type="submit" id="pulsarSubmit">Generate</button>
+            <form class="action-stack" action="/download-pulsar" method="POST" id="downloadForm">
+                <input type="hidden" name="theme" value="{{ selected_theme }}">
+                <input type="hidden" name="duration" value="{{ duration }}">
+                <input type="hidden" name="fps" value="{{ fps }}">
+                <input type="hidden" name="wave_layers" value="{{ wave_layers }}">
+                <input type="hidden" name="particle_count" value="{{ particle_count }}">
+                <input type="hidden" name="color_speed" value="{{ color_speed }}">
+                <input type="hidden" name="morph_intensity" value="{{ morph_intensity }}">
+                <input type="hidden" name="symmetry" value="{{ symmetry }}">
+                <input type="hidden" name="beat_mode" value="{{ beat_mode }}">
+                <button class="download-button" type="submit" {% if not animation %}disabled{% endif %}>Download GIF</button>
             </form>
         </aside>
 
         <section>
-            <div class="pulsar-output">
-                <div class="pulsar-image-frame">
-                    {% if artwork %}
-                        <img id="pulsarArtwork" src="data:image/png;base64,{{ artwork }}" alt="Generated Pulsar data artwork">
-                    {% else %}
-                        <div class="wave-placeholder">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <strong>Select parameters and render your landscape</strong>
-                        </div>
-                    {% endif %}
-                </div>
-
-                {% if artwork %}
-                    <div class="pulsar-download-row">
-                        <button class="pulsar-download" type="button" data-download-target="pulsarArtwork" data-filename="pulsar-data-art.png">Download PNG</button>
-                    </div>
+            <div class="preview-panel">
+                {% if animation %}
+                    <img class="generated-gif" src="data:image/gif;base64,{{ animation }}" alt="Generated Pulsar animation">
+                {% else %}
+                    <canvas id="idleCanvas" width="900" height="500" aria-label="Idle animated Pulsar preview"></canvas>
                 {% endif %}
             </div>
 
             {% if stats %}
-                <div class="pulsar-stats">
-                    <article class="pulsar-stat">
-                        <span class="stat-icon">📅</span>
-                        <span class="stat-label">Period</span>
-                        <strong class="stat-value">{{ stats.days }}</strong>
-                        <span class="stat-unit">days</span>
-                    </article>
-                    <article class="pulsar-stat">
-                        <span class="stat-icon">🌡️</span>
-                        <span class="stat-label">Avg Temp</span>
-                        <strong class="stat-value">{{ stats.avg_temperature }}</strong>
-                        <span class="stat-unit">°C</span>
-                    </article>
-                    <article class="pulsar-stat">
-                        <span class="stat-icon">💧</span>
-                        <span class="stat-label">Humidity</span>
-                        <strong class="stat-value">{{ stats.avg_humidity }}</strong>
-                        <span class="stat-unit">%</span>
-                    </article>
-                    <article class="pulsar-stat">
-                        <span class="stat-icon">💨</span>
-                        <span class="stat-label">Wind</span>
-                        <strong class="stat-value">{{ stats.avg_wind }}</strong>
-                        <span class="stat-unit">km/h</span>
-                    </article>
+                <div class="stats-row">
+                    <article class="stat-card"><span>&#127916;</span><span class="stat-label">Frames</span><strong class="stat-value">{{ stats.frames }}</strong></article>
+                    <article class="stat-card"><span>&#9201;</span><span class="stat-label">Duration</span><strong class="stat-value">{{ stats.duration }}s</strong></article>
+                    <article class="stat-card"><span>&#128257;</span><span class="stat-label">FPS</span><strong class="stat-value">{{ stats.fps }}</strong></article>
+                    <article class="stat-card"><span>&#10022;</span><span class="stat-label">Particles</span><strong class="stat-value">{{ stats.particles }}</strong></article>
+                    <article class="stat-card"><span>&#8776;</span><span class="stat-label">Waves</span><strong class="stat-value">{{ stats.waves }}</strong></article>
+                    <article class="stat-card"><span>&#11041;</span><span class="stat-label">Symmetry</span><strong class="stat-value">{{ stats.symmetry }}</strong></article>
+                    <article class="stat-card"><span>&#128190;</span><span class="stat-label">Size</span><strong class="stat-value">{{ stats.size_mb }} MB</strong></article>
                 </div>
             {% endif %}
         </section>
@@ -486,44 +526,67 @@
 </main>
 
 <script>
-    const themeInput = document.getElementById("themeInput");
-    const themeChoices = document.querySelectorAll("input[name='theme_choice']");
-    const days = document.getElementById("days");
-    const daysValue = document.getElementById("daysValue");
-    const density = document.getElementById("density");
-    const densityValue = document.getElementById("densityValue");
     const pulsarForm = document.getElementById("pulsarForm");
-    const pulsarSubmit = document.getElementById("pulsarSubmit");
+    const downloadForm = document.getElementById("downloadForm");
+    const renderButton = document.getElementById("renderButton");
 
-    themeChoices.forEach((choice) => {
-        choice.addEventListener("change", () => {
-            themeInput.value = choice.value;
+    function syncDownloadForm() {
+        if (!downloadForm) return;
+        new FormData(pulsarForm).forEach((value, key) => {
+            const target = downloadForm.querySelector(`[name="${key}"]`);
+            if (target) target.value = value;
         });
-    });
+    }
 
-    days.addEventListener("input", () => {
-        daysValue.textContent = days.value;
-    });
-
-    density.addEventListener("input", () => {
-        densityValue.textContent = density.value;
+    pulsarForm.querySelectorAll("input").forEach((input) => {
+        input.addEventListener("input", () => {
+            const valueNode = document.querySelector(`[data-value-for="${input.id}"]`);
+            if (valueNode) valueNode.textContent = input.value;
+            syncDownloadForm();
+        });
+        input.addEventListener("change", syncDownloadForm);
     });
 
     pulsarForm.addEventListener("submit", () => {
-        pulsarSubmit.classList.add("is-loading", "loading");
-        pulsarSubmit.innerHTML = '<span class="pulsar-spinner"></span><span>Rendering landscape...</span>';
+        renderButton.classList.add("is-rendering", "loading");
+        renderButton.textContent = "Rendering... (this may take 30s)";
+        renderButton.disabled = true;
     });
 
-    document.querySelectorAll("[data-download-target]").forEach((button) => {
-        button.addEventListener("click", () => {
-            const image = document.getElementById(button.dataset.downloadTarget);
-            if (!image) return;
+    syncDownloadForm();
 
-            const link = document.createElement("a");
-            link.href = image.src;
-            link.download = button.dataset.filename;
-            link.click();
-        });
-    });
+    const idleCanvas = document.getElementById("idleCanvas");
+    if (idleCanvas) {
+        const ctx = idleCanvas.getContext("2d");
+        let frame = 0;
+
+        function drawIdle() {
+            const width = idleCanvas.width;
+            const height = idleCanvas.height;
+            ctx.fillStyle = "#070b14";
+            ctx.fillRect(0, 0, width, height);
+
+            for (let wave = 0; wave < 5; wave += 1) {
+                ctx.beginPath();
+                const amp = 22 + wave * 8;
+                const freq = 0.012 + wave * 0.003;
+                const base = height * (0.24 + wave * 0.13);
+                ctx.strokeStyle = `rgba(124, 58, 237, ${0.22 + wave * 0.08})`;
+                ctx.lineWidth = 2;
+
+                for (let x = 0; x <= width; x += 6) {
+                    const y = base + Math.sin(x * freq + frame * (0.025 + wave * 0.006)) * amp;
+                    if (x === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
+
+            frame += 1;
+            requestAnimationFrame(drawIdle);
+        }
+
+        drawIdle();
+    }
 </script>
 {% endblock %}
