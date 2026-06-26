@@ -3,34 +3,75 @@
 {% block title %}Canvas - Studio{% endblock %}
 
 {% block content %}
-<main class="module-page">
-    <section class="module-header shell">
-        <p class="breadcrumb">Studio / Canvas</p>
-        <h1>Canvas</h1>
-        <p>Draw, animate, and export in real time.</p>
+<main class="module-page canvas-page">
+    <section class="module-header canvas-hero shell">
+        <div>
+            <p class="breadcrumb">Studio / Drawing</p>
+            <h1>Motion Canvas</h1>
+            <p>Pick a brush, choose a color mood, then draw animated shapes directly on the canvas.</p>
+            <div class="canvas-steps" aria-label="Canvas workflow">
+                <a href="#canvas-brush"><strong>1</strong> Choose brush</a>
+                <a href="#canvas-colors"><strong>2</strong> Pick colors</a>
+                <a href="#artCanvas"><strong>3</strong> Draw & save</a>
+            </div>
+        </div>
+        <div class="canvas-hero-art" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </section>
 
     <section class="workspace-grid shell canvas-workspace">
         <aside class="control-panel canvas-controls">
-            <label class="control-row" for="shapeType">
+            <label id="canvas-brush" class="control-row" for="shapeType">
                 <span>Shape</span>
                 <select id="shapeType">
                     <option value="circle">Circle</option>
                     <option value="square">Square</option>
                     <option value="triangle">Triangle</option>
                     <option value="line">Line</option>
+                    <option value="star">Star</option>
+                    <option value="diamond">Diamond</option>
+                    <option value="ring">Ring</option>
+                    <option value="spark">Spark</option>
                 </select>
             </label>
 
-            <label class="control-row" for="palette">
+            <label id="canvas-colors" class="control-row" for="palette">
                 <span>Palette</span>
                 <select id="palette">
                     <option value="aurora">Aurora</option>
                     <option value="citrus">Citrus</option>
                     <option value="mono">Ink</option>
                     <option value="neon">Neon</option>
+                    <option value="steel">Steel Night</option>
+                    <option value="sunrise">Sunrise</option>
+                    <option value="lagoon">Lagoon</option>
+                    <option value="candy">Candy</option>
                 </select>
             </label>
+
+            <label class="control-row" for="symmetryMode">
+                <span>Symmetry</span>
+                <select id="symmetryMode">
+                    <option value="off">Off</option>
+                    <option value="mirror">Mirror</option>
+                    <option value="mandala">Mandala</option>
+                </select>
+            </label>
+
+            <div class="canvas-preset-guide">
+                <strong>Quick brushes</strong>
+                <span>Use Mandala symmetry and Gravity trails to turn simple strokes into living patterns.</span>
+            </div>
+
+            <div class="canvas-brush-presets" aria-label="Brush presets">
+                <button type="button" data-brush-preset="soft">Soft</button>
+                <button type="button" data-brush-preset="spark" class="active">Spark</button>
+                <button type="button" data-brush-preset="bold">Bold</button>
+            </div>
 
             <label class="control-row" for="shapeSize">
                 <span>Size <strong id="sizeValue">34</strong></span>
@@ -47,10 +88,15 @@
                 <input type="checkbox" id="animateToggle" checked>
             </label>
 
+            <label class="toggle-row" for="gravityToggle">
+                <span>Gravity trails</span>
+                <input type="checkbox" id="gravityToggle">
+            </label>
+
             <div class="button-grid">
-                <button type="button" id="randomBtn">Random</button>
-                <button type="button" id="clearBtn">Clear</button>
-                <button type="button" id="downloadBtn">Download PNG</button>
+                <button type="button" id="randomBtn">Surprise me</button>
+                <button type="button" id="clearBtn">Clear canvas</button>
+                <button type="button" id="downloadBtn">Save PNG</button>
             </div>
         </aside>
 

@@ -5,9 +5,17 @@
 {% block content %}
 <main class="gallery-page">
     <section class="gallery-hero shell">
-        <p class="breadcrumb">Studio / Gallery</p>
-        <h1>Gallery</h1>
-        <p>Explore what the studio can create.</p>
+        <div>
+            <p class="breadcrumb">Studio / Gallery</p>
+            <h1>Creative Gallery</h1>
+            <p>Browse the studio modules and open the tool you want to create with.</p>
+        </div>
+        <div class="gallery-hero-preview" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </section>
 
     <section class="gallery-grid shell" aria-label="Studio gallery">
@@ -17,9 +25,10 @@
                     <span>{{ module.icon }}</span>
                 </div>
                 <div class="gallery-card-body">
+                    <small>Module {{ loop.index }}</small>
                     <h2>{{ module.title }}</h2>
                     <p>{{ module.description }}</p>
-                    <strong>Open module &rarr;</strong>
+                    <strong>Open tool</strong>
                 </div>
             </a>
         {% endfor %}

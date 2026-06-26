@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Axe 6 - ML Palette{% endblock %}
+
+{% block extra_css %}
+.palette-swatch {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 1rem;
+    align-items: center;
+}
+
+.swatch-color {
+    width: 88px;
+    height: 64px;
+    border: 1px solid rgba(23, 32, 38, 0.14);
+    border-radius: 0.5rem;
+}
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="studio-card p-4">
+                <p class="eyebrow mb-2">Axe 6 bonus</p>
+                <h1 class="h3 mb-3">ML Color Extraction</h1>
+                <p class="text-secondary">
+                    Upload an image and extract its dominant palette with K-means clustering.
+                </p>
+
+                <form method="post" enctype="multipart/form-data" class="d-grid gap-3">
+                    <div>
+                        <label class="form-label fw-semibold" for="image">Image</label>
+                        <input class="form-control" type="file" id="image" name="image" accept="image/*" required>
+                    </div>
+
+                    <div>
+                        <label class="form-label fw-semibold" for="k">Number of colors</label>
+                        <input class="form-control" type="number" id="k" name="k" min="2" max="10" value="{{ k or 5 }}">
+                    </div>
+
+                    <button class="btn btn-studio" type="submit">Extract Palette</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="studio-card p-4">
+                <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+                    <div>
+                        <p class="eyebrow mb-2">Result</p>
+                        <h2 class="h4 mb-0">Dominant colors</h2>
+                    </div>
+                    {% if uploaded_filename %}
+                        <span class="badge text-bg-light">{{ uploaded_filename }}</span>
+                    {% endif %}
+                </div>
+
+                {% if palette %}
+                    <div class="d-grid gap-3">
+                        {% for color in palette %}
+                            <article class="palette-swatch border rounded p-3">
+                                <div class="swatch-color" style="background: {{ color.hex }}"></div>
+                                <div>
+                                    <h3 class="h5 mb-1">{{ color.hex }}</h3>
+                                    <p class="text-secondary mb-1">RGB {{ color.rgb[0] }}, {{ color.rgb[1] }}, {{ color.rgb[2] }}</p>
+                                    <div class="progress" role="progressbar" aria-label="Color percentage">
+                                        <div class="progress-bar" style="width: {{ color.percentage }}%; background: {{ color.hex }}">
+                                            {{ color.percentage }}%
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-secondary border rounded p-4">
+                        Your extracted color palette will appear here after uploading an image.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

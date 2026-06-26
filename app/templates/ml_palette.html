@@ -1,38 +1,71 @@
 {% extends "base.html" %}
 
-{% block title %}Chroma - Studio{% endblock %}
+{% block title %}Palette Studio{% endblock %}
 
 {% block content %}
-<main class="module-page">
-    <section class="module-header shell">
-        <p class="breadcrumb">Studio / Chroma</p>
-        <h1>Chroma</h1>
-        <p>Extract dominant colors with machine learning.</p>
+<main class="module-page chroma-page">
+    <section class="module-header chroma-hero shell">
+        <div>
+            <p class="breadcrumb">Studio / Palette</p>
+            <h1>Palette Studio</h1>
+            <p>Choose an image, select how many colors you need, then generate a palette you can copy and reuse.</p>
+            <div class="chroma-steps" aria-label="Palette workflow">
+                <a href="#palette-upload"><strong>1</strong> Choose an image</a>
+                <a href="#palette-size"><strong>2</strong> Pick palette size</a>
+                <a href="#palette-results"><strong>3</strong> Copy your colors</a>
+            </div>
+        </div>
+        <div class="chroma-hero-art" aria-hidden="true">
+            <span style="background:#4da3ff"></span>
+            <span style="background:#ff8a3d"></span>
+            <span style="background:#9d7bff"></span>
+            <span style="background:#6ee7d8"></span>
+            <span style="background:#e7ecf5"></span>
+        </div>
     </section>
 
-    <section class="workspace-grid shell">
-        <aside class="control-panel">
+    <section class="workspace-grid chroma-workspace shell">
+        <aside class="control-panel chroma-control-panel">
             <form id="paletteForm" class="controls">
-                <label class="drop-zone" for="imageInput">
+                <label id="palette-upload" class="drop-zone" for="imageInput">
                     <input type="file" id="imageInput" name="image" accept="image/*" required>
-                    <span>Drop image here or browse</span>
-                    <small>K-means will find the dominant colors</small>
+                    <span>Choose your image</span>
+                    <small>JPG, PNG, or WebP</small>
                 </label>
 
-                <label class="control-row" for="colorCount">
-                    <span>Colors <strong id="colorCountValue">5</strong></span>
+                <label id="palette-size" class="control-row" for="colorCount">
+                    <span>Palette size <strong id="colorCountValue">5</strong></span>
                     <input type="range" id="colorCount" name="colors" min="2" max="8" value="5">
                 </label>
 
-                <button type="submit" class="submit-btn" data-loading-text="Extracting">Extract Palette</button>
+                <div class="preset-guide">
+                    <strong>Quick choices</strong>
+                    <span>Simple gives fewer colors, Detailed keeps more shades.</span>
+                </div>
+
+                <div class="chroma-presets" aria-label="Palette size presets">
+                    <button type="button" data-color-preset="3">Simple <small>3 colors</small></button>
+                    <button type="button" data-color-preset="5" class="active">Balanced <small>5 colors</small></button>
+                    <button type="button" data-color-preset="8">Detailed <small>8 colors</small></button>
+                </div>
+
+                <button type="submit" class="submit-btn" data-loading-text="Extracting">Generate Palette</button>
             </form>
 
             <p id="paletteMessage" class="status-message"></p>
         </aside>
 
         <section class="output-panel chroma-output">
-            <div id="imagePreview" class="image-preview empty-preview"></div>
-            <div id="paletteResult" class="palette-result"></div>
+            <div class="chroma-preview-stack">
+                <div id="imagePreview" class="image-preview empty-preview"></div>
+                <div id="imageMeta" class="image-meta">No image selected</div>
+            </div>
+            <div id="palette-results" class="palette-result empty-palette">
+                <article>
+                    <strong>Ready for colors</strong>
+                    <span>Upload an image and press Generate Palette.</span>
+                </article>
+            </div>
             <div id="paletteBar" class="palette-bar"></div>
         </section>
     </section>

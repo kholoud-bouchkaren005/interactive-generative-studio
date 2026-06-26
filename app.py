@@ -2,7 +2,7 @@ import base64
 import os
 import sys
 
-from flask import Flask, Response, jsonify, redirect, render_template, request, url_for
+from flask import Flask, Response, jsonify, redirect, render_template, request, session, url_for
 
 
 template_dir = os.path.abspath("app/templates")
@@ -11,11 +11,15 @@ sys.path.insert(0, os.path.abspath("app"))
 
 from modules.data_visualization.data_art import ANIMATION_THEMES, generate_pulsar_animation
 from modules.generative_art.artworks import PALETTES, generate_artwork
-from modules.image_audio_processing.image_tools import apply_image_effect
+from modules.image_audio_processing.image_tools import apply_image_effect, image_to_base64, load_image_source
 from modules.ml_tools.color_extraction import extract_palette
 
 
 app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
+app.secret_key = os.environ.get("SECRET_KEY", "interactive-generative-studio-dev")
+generated_dir = os.path.join(static_dir, "generated")
+os.makedirs(generated_dir, exist_ok=True)
+LENS_SOURCE_PATH = os.path.join(generated_dir, "lens_source.png")
 
 
 MODULES = [
@@ -35,10 +39,10 @@ MODULES = [
     },
     {
         "key": "lens",
-        "icon": "L",
-        "title": "Lens",
+        "icon": "S",
+        "title": "Styler",
         "route": "image_audio_tools",
-        "description": "Upload, transform, and download creative filters",
+        "description": "Change the style of an image with creative filters",
     },
     {
         "key": "canvas",
@@ -49,10 +53,10 @@ MODULES = [
     },
     {
         "key": "chroma",
-        "icon": "H",
-        "title": "Chroma",
+        "icon": "P",
+        "title": "Palette Studio",
         "route": "ml_palette",
-        "description": "Extract dominant colors with machine learning",
+        "description": "Turn any image into a reusable color palette",
     },
 ]
 
@@ -192,11 +196,16 @@ def download_pulsar():
 @app.route("/axe3")
 @app.route("/upload")
 def image_audio_tools():
+    saved_image = None
+    if session.get("lens_image_saved") and os.path.exists(LENS_SOURCE_PATH):
+        saved_image = image_to_base64(load_image_source(LENS_SOURCE_PATH))
+
     return render_template(
         "upload.html",
         selected_effect="grayscale",
         strength=4,
         output=None,
+        saved_image=saved_image,
     )
 
 
@@ -205,23 +214,34 @@ def apply_image_effect_route():
     image_file = request.files.get("image")
     effect = request.form.get("effect", "grayscale")
     strength = int(request.form.get("strength", 4))
+    saved_image = None
 
-    if not image_file or image_file.filename == "":
+    if image_file and image_file.filename != "":
+        base_image = load_image_source(image_file)
+        base_image.thumbnail((1100, 760))
+        base_image.save(LENS_SOURCE_PATH, format="PNG")
+        session["lens_image_saved"] = True
+    elif session.get("lens_image_saved") and os.path.exists(LENS_SOURCE_PATH):
+        base_image = load_image_source(LENS_SOURCE_PATH)
+    else:
         return render_template(
             "upload.html",
             selected_effect=effect,
             strength=strength,
             output=None,
+            saved_image=None,
             error="Please upload an image first.",
         )
 
-    output = apply_image_effect(image_file, effect=effect, strength=strength)
+    saved_image = image_to_base64(base_image)
+    output = apply_image_effect(base_image, effect=effect, strength=strength)
 
     return render_template(
         "upload.html",
         selected_effect=effect,
         strength=strength,
         output=output,
+        saved_image=saved_image,
         error=None,
     )
 
