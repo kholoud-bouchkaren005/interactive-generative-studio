@@ -15,6 +15,84 @@ GitHub repository:
 https://github.com/kholoud-bouchkaren005/interactive-generative-studio
 ```
 
+## Quick Start Guide for the Professor
+
+This guide explains how to get the project from GitHub and run it locally.
+
+### 1. Download the project from GitHub
+
+Open this repository in the browser:
+
+```text
+https://github.com/kholoud-bouchkaren005/interactive-generative-studio
+```
+
+Then choose one of these two methods:
+
+**Method A - Download ZIP**
+
+1. Click the green `Code` button.
+2. Click `Download ZIP`.
+3. Extract the ZIP file.
+4. Open the extracted folder named `interactive-generative-studio`.
+
+**Method B - Clone with Git**
+
+If Git is installed, open a terminal and run:
+
+```bash
+git clone https://github.com/kholoud-bouchkaren005/interactive-generative-studio.git
+cd interactive-generative-studio
+```
+
+### 2. Open the project folder in a terminal
+
+If the project was downloaded as ZIP, open a terminal inside the extracted folder.
+
+On Windows, this can be done by opening the folder, clicking the address bar, typing `cmd`, and pressing Enter.
+
+### 3. Create a virtual environment
+
+```bash
+python -m venv .venv
+```
+
+### 4. Activate the virtual environment
+
+On Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+On macOS or Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+### 5. Install the required libraries
+
+```bash
+pip install -r requirements.txt
+```
+
+### 6. Run the Flask application
+
+```bash
+python app.py
+```
+
+### 7. Open the application in the browser
+
+After running `python app.py`, open:
+
+```text
+http://127.0.0.1:5000
+```
+
+If the browser does not open automatically, copy this link and paste it manually into the browser.
+
 ## Team Members and Contributions
 
 - Nihal: Axe 1 - Generative Art, Axe 2 - Pulsar Generative Animation.
