@@ -5,18 +5,18 @@
 {% block content %}
 <style>
     .pulsar-page {
-        --pulsar-accent: #00e0ff;
-        --pulsar-accent-2: #ff4fd8;
-        --pulsar-accent-3: #ffe66d;
-        --pulsar-panel: rgba(7, 13, 24, 0.9);
+        --pulsar-accent: #d88a36;
+        --pulsar-accent-2: #8e2619;
+        --pulsar-accent-3: #f0c36a;
+        --pulsar-panel: rgba(18, 9, 7, 0.92);
         --pulsar-panel-soft: rgba(255, 255, 255, 0.055);
-        --pulsar-line: rgba(255, 255, 255, 0.12);
+        --pulsar-line: rgba(240, 195, 106, 0.16);
         min-height: 100vh;
         padding: 64px clamp(18px, 4vw, 56px) 88px;
         background:
-            linear-gradient(135deg, rgba(0, 224, 255, 0.08), transparent 34%),
-            linear-gradient(315deg, rgba(255, 79, 216, 0.1), transparent 38%),
-            linear-gradient(180deg, rgba(255, 230, 109, 0.04), transparent 42%),
+            linear-gradient(135deg, rgba(216, 138, 54, 0.11), transparent 34%),
+            linear-gradient(315deg, rgba(142, 38, 25, 0.14), transparent 38%),
+            linear-gradient(180deg, rgba(240, 195, 106, 0.05), transparent 42%),
             var(--bg-primary);
     }
 
@@ -26,7 +26,7 @@
 
     .pulsar-breadcrumb {
         margin: 0 0 10px;
-        color: #8fa7b8;
+        color: #b79b7b;
         font-size: 14px;
         font-weight: 700;
     }
@@ -37,13 +37,13 @@
         font-family: "Space Grotesk", sans-serif;
         font-size: clamp(60px, 9vw, 132px);
         line-height: 0.92;
-        text-shadow: 0 0 36px rgba(0, 224, 255, 0.12);
+        text-shadow: 0 0 36px rgba(216, 138, 54, 0.16);
     }
 
     .pulsar-header p:last-of-type {
         max-width: 760px;
         margin: 16px 0 0;
-        color: #a8b7c6;
+        color: #c6ad91;
         font-size: clamp(17px, 2vw, 22px);
         line-height: 1.55;
     }
@@ -53,7 +53,7 @@
         height: 2px;
         margin-top: 24px;
         border-radius: var(--radius-pill);
-        background: linear-gradient(90deg, var(--pulsar-accent), var(--pulsar-accent-3), var(--pulsar-accent-2));
+        background: linear-gradient(90deg, #7c1f1f, var(--pulsar-accent), var(--pulsar-accent-3));
         animation: line-grow 1.5s ease forwards;
     }
 
@@ -99,8 +99,8 @@
     }
 
     .control-section[open] {
-        border-color: rgba(0, 224, 255, 0.28);
-        background: rgba(0, 224, 255, 0.04);
+        border-color: rgba(216, 138, 54, 0.32);
+        background: rgba(216, 138, 54, 0.055);
     }
 
     .control-section summary {
@@ -153,7 +153,7 @@
 
     .theme-card:hover {
         transform: translateY(-1px);
-        border-color: rgba(255, 230, 109, 0.24);
+        border-color: rgba(240, 195, 106, 0.28);
     }
 
     .theme-card input,
@@ -165,8 +165,8 @@
 
     .theme-card:has(input:checked) {
         border-left-color: var(--pulsar-accent);
-        background: rgba(0, 224, 255, 0.1);
-        box-shadow: 0 0 24px rgba(0, 224, 255, 0.12);
+        background: rgba(216, 138, 54, 0.12);
+        box-shadow: 0 0 24px rgba(216, 138, 54, 0.14);
     }
 
     .theme-swatch {
@@ -176,11 +176,17 @@
         border: 1px solid rgba(255, 255, 255, 0.14);
     }
 
-    .theme-aurora { background: linear-gradient(135deg, #3dd6d0, #8a5cf6, #ff7aa2); }
-    .theme-sunset { background: linear-gradient(135deg, #f72585, #ff7a00, #ffd166); }
-    .theme-forest { background: linear-gradient(135deg, #2d6a4f, #95d5b2, #d8f3dc); }
-    .theme-cosmos { background: linear-gradient(135deg, #240046, #7b2fff, #ff6b6b); }
-    .theme-neon { background: linear-gradient(135deg, #00f5d4, #fee440, #f15bb5); }
+    .theme-aurora { background: linear-gradient(135deg, #3b0d0c, #d8792f, #fff0b8); }
+    .theme-sunset { background: linear-gradient(135deg, #2b0710, #c85d2b, #f6d186); }
+    .theme-forest { background: linear-gradient(135deg, #1b0f08, #9c5c22, #ead7a1); }
+    .theme-cosmos { background: linear-gradient(135deg, #14080d, #9e3326, #f8cf7a); }
+    .theme-neon { background: linear-gradient(135deg, #180907, #b5431e, #ffe1a3); }
+    .theme-sapphire { background: linear-gradient(135deg, #030916, #1f5f8f, #d5ecf6); }
+    .theme-gold { background: linear-gradient(135deg, #120903, #9a6218, #fff2bd); }
+    .theme-verdant { background: linear-gradient(135deg, #06120a, #4f8b4d, #e3e6a5); }
+    .theme-ruby { background: linear-gradient(135deg, #140406, #9e2d2f, #ffd1a3); }
+    .theme-amethyst { background: linear-gradient(135deg, #0b0714, #6c3d7d, #ead5c7); }
+    .theme-pearl { background: linear-gradient(135deg, #0b0a08, #7f705c, #fff4d6); }
 
     .theme-card strong,
     .theme-card span {
@@ -194,7 +200,7 @@
 
     .theme-card span {
         margin-top: 3px;
-        color: #9db0be;
+        color: #b89d80;
         font-size: 12px;
     }
 
@@ -223,7 +229,7 @@
 
     .helper-text {
         margin: 0;
-        color: #8fa7b8;
+        color: #b79b7b;
         font-size: 12px;
     }
 
@@ -263,7 +269,7 @@
         border-color: var(--pulsar-accent);
         color: #031018;
         background: var(--pulsar-accent);
-        box-shadow: 0 0 20px rgba(0, 224, 255, 0.22);
+        box-shadow: 0 0 20px rgba(216, 138, 54, 0.24);
     }
 
     .action-stack {
@@ -285,8 +291,8 @@
 
     .render-button {
         border: 0;
-        color: #031018;
-        background: linear-gradient(90deg, var(--pulsar-accent), var(--pulsar-accent-3));
+        color: #190905;
+        background: linear-gradient(90deg, #b75a25, var(--pulsar-accent-3));
         letter-spacing: 0.02em;
     }
 
@@ -304,7 +310,7 @@
     }
 
     .download-button {
-        border: 1px solid rgba(0, 224, 255, 0.82);
+        border: 1px solid rgba(216, 138, 54, 0.82);
         color: #f8fbff;
         background: transparent;
     }
@@ -317,7 +323,7 @@
     .preview-panel {
         overflow: hidden;
         min-height: 500px;
-        background: #070b14;
+        background: #080403;
         box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03), 0 30px 90px rgba(0, 0, 0, 0.24);
     }
 
@@ -336,9 +342,9 @@
     }
 
     @keyframes pulse-border {
-        0%, 100% { border-color: #00e0ff; box-shadow: 0 0 22px rgba(0, 224, 255, 0.25); }
-        33% { border-color: #ffe66d; box-shadow: 0 0 22px rgba(255, 230, 109, 0.2); }
-        66% { border-color: #ff4fd8; box-shadow: 0 0 22px rgba(255, 79, 216, 0.22); }
+        0%, 100% { border-color: #d88a36; box-shadow: 0 0 22px rgba(216, 138, 54, 0.25); }
+        33% { border-color: #f0c36a; box-shadow: 0 0 22px rgba(240, 195, 106, 0.2); }
+        66% { border-color: #8e2619; box-shadow: 0 0 22px rgba(142, 38, 25, 0.24); }
     }
 
     .stats-row {
@@ -412,15 +418,27 @@
                                 <span>
                                     <strong>{{ theme|capitalize }}</strong>
                                     {% if theme == "aurora" %}
-                                        <span>Bioluminescent depths</span>
+                                        <span>Amber stellar veil</span>
                                     {% elif theme == "sunset" %}
-                                        <span>Cosmic explosion</span>
+                                        <span>Deep ember horizon</span>
                                     {% elif theme == "forest" %}
-                                        <span>Ancient mandala</span>
+                                        <span>Burnished earth glow</span>
                                     {% elif theme == "cosmos" %}
-                                        <span>Nebula drift</span>
+                                        <span>Red-gold nebula drift</span>
                                     {% elif theme == "neon" %}
-                                        <span>Digital pulse</span>
+                                        <span>Molten solar pulse</span>
+                                    {% elif theme == "sapphire" %}
+                                        <span>Deep blue stellar tide</span>
+                                    {% elif theme == "gold" %}
+                                        <span>Refined golden corona</span>
+                                    {% elif theme == "verdant" %}
+                                        <span>Emerald cosmic bloom</span>
+                                    {% elif theme == "ruby" %}
+                                        <span>Smoldering red cluster</span>
+                                    {% elif theme == "amethyst" %}
+                                        <span>Muted violet dusk</span>
+                                    {% elif theme == "pearl" %}
+                                        <span>Soft ivory stardust</span>
                                     {% endif %}
                                 </span>
                             </label>
@@ -586,23 +604,45 @@
         function drawIdle() {
             const width = idleCanvas.width;
             const height = idleCanvas.height;
-            ctx.fillStyle = "#070b14";
+            ctx.fillStyle = "#080403";
             ctx.fillRect(0, 0, width, height);
 
-            for (let wave = 0; wave < 5; wave += 1) {
-                ctx.beginPath();
-                const amp = 22 + wave * 8;
-                const freq = 0.012 + wave * 0.003;
-                const base = height * (0.24 + wave * 0.13);
-                ctx.strokeStyle = `rgba(124, 58, 237, ${0.22 + wave * 0.08})`;
-                ctx.lineWidth = 2;
+            const cx = width / 2;
+            const cy = height / 2;
+            const glow = ctx.createRadialGradient(cx, cy, 8, cx, cy, 320);
+            glow.addColorStop(0, "rgba(240, 195, 106, 0.22)");
+            glow.addColorStop(0.32, "rgba(216, 138, 54, 0.12)");
+            glow.addColorStop(1, "rgba(8, 4, 3, 0)");
+            ctx.fillStyle = glow;
+            ctx.fillRect(0, 0, width, height);
 
-                for (let x = 0; x <= width; x += 6) {
-                    const y = base + Math.sin(x * freq + frame * (0.025 + wave * 0.006)) * amp;
-                    if (x === 0) ctx.moveTo(x, y);
+            for (let arm = 0; arm < 4; arm += 1) {
+                ctx.beginPath();
+                ctx.strokeStyle = `rgba(216, ${120 + arm * 18}, 54, ${0.18 + arm * 0.035})`;
+                ctx.lineWidth = 5 - arm * 0.45;
+
+                for (let i = 0; i < 260; i += 1) {
+                    const r = 12 + i * 1.05;
+                    const angle = i * 0.075 + arm * Math.PI / 2 + frame * 0.006;
+                    const breathe = Math.sin(frame * 0.018 + i * 0.04 + arm) * 6;
+                    const x = cx + (r + breathe) * Math.cos(angle);
+                    const y = cy + (r + breathe) * Math.sin(angle) * 0.42;
+                    if (i === 0) ctx.moveTo(x, y);
                     else ctx.lineTo(x, y);
                 }
                 ctx.stroke();
+            }
+
+            for (let dust = 0; dust < 90; dust += 1) {
+                const r = 24 + (dust * 37) % 260;
+                const angle = dust * 2.399 + frame * 0.004 + r * 0.015;
+                const x = cx + r * Math.cos(angle);
+                const y = cy + r * Math.sin(angle) * 0.42;
+                const alpha = 0.16 + 0.16 * Math.sin(frame * 0.02 + dust);
+                ctx.fillStyle = `rgba(240, 195, 106, ${alpha})`;
+                ctx.beginPath();
+                ctx.arc(x, y, 1.2 + (dust % 3) * 0.4, 0, Math.PI * 2);
+                ctx.fill();
             }
 
             frame += 1;

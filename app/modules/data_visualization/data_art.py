@@ -15,29 +15,59 @@ from PIL import Image
 
 ANIMATION_THEMES = {
     "aurora": {
-        "colors": ["#3dd6d0", "#8a5cf6", "#ff7aa2", "#1f7a8c", "#c77dff"],
-        "background": "#070b14",
-        "cmap_sequence": ["cool", "winter", "plasma"],
+        "colors": ["#3b0d0c", "#8f2f16", "#d8792f", "#f0b15f", "#fff0b8"],
+        "background": "#080403",
+        "cmap_sequence": ["afmhot", "copper", "gist_heat"],
     },
     "sunset": {
-        "colors": ["#f72585", "#ff7a00", "#ffd166", "#8338ec", "#ef233c"],
-        "background": "#0d0510",
-        "cmap_sequence": ["inferno", "hot", "autumn"],
+        "colors": ["#2b0710", "#7c1f1f", "#c85d2b", "#e49a45", "#f6d186"],
+        "background": "#0c0505",
+        "cmap_sequence": ["inferno", "YlOrBr", "gist_heat"],
     },
     "forest": {
-        "colors": ["#2d6a4f", "#40916c", "#95d5b2", "#d8f3dc", "#52b788"],
-        "background": "#050d07",
-        "cmap_sequence": ["YlGn", "summer", "BuGn"],
+        "colors": ["#1b0f08", "#5b2a12", "#9c5c22", "#d69a4d", "#ead7a1"],
+        "background": "#070504",
+        "cmap_sequence": ["copper", "YlOrBr", "pink"],
     },
     "cosmos": {
-        "colors": ["#240046", "#7b2fff", "#e0aaff", "#ff6b6b", "#ffd166"],
-        "background": "#03000a",
-        "cmap_sequence": ["plasma", "magma", "twilight"],
+        "colors": ["#14080d", "#4b1520", "#9e3326", "#d9843f", "#f8cf7a"],
+        "background": "#050307",
+        "cmap_sequence": ["magma", "inferno", "copper"],
     },
     "neon": {
-        "colors": ["#00f5d4", "#00bbf9", "#fee440", "#f15bb5", "#9b5de5"],
-        "background": "#020202",
-        "cmap_sequence": ["cool", "spring", "hsv"],
+        "colors": ["#180907", "#6c1d12", "#b5431e", "#e8893a", "#ffe1a3"],
+        "background": "#060302",
+        "cmap_sequence": ["gist_heat", "afmhot", "YlOrRd"],
+    },
+    "sapphire": {
+        "colors": ["#030916", "#0d2a4d", "#1f5f8f", "#66a6c9", "#d5ecf6"],
+        "background": "#020611",
+        "cmap_sequence": ["Blues", "PuBu", "cividis"],
+    },
+    "gold": {
+        "colors": ["#120903", "#4f2607", "#9a6218", "#d7a64a", "#fff2bd"],
+        "background": "#070402",
+        "cmap_sequence": ["YlOrBr", "copper", "afmhot"],
+    },
+    "verdant": {
+        "colors": ["#06120a", "#1e4a2f", "#4f8b4d", "#98c66d", "#e3e6a5"],
+        "background": "#030803",
+        "cmap_sequence": ["Greens", "summer", "YlGn"],
+    },
+    "ruby": {
+        "colors": ["#140406", "#541019", "#9e2d2f", "#d96b4b", "#ffd1a3"],
+        "background": "#080203",
+        "cmap_sequence": ["Reds", "YlOrRd", "gist_heat"],
+    },
+    "amethyst": {
+        "colors": ["#0b0714", "#33194f", "#6c3d7d", "#a9789f", "#ead5c7"],
+        "background": "#05030a",
+        "cmap_sequence": ["Purples", "magma", "pink"],
+    },
+    "pearl": {
+        "colors": ["#0b0a08", "#3f3529", "#7f705c", "#c8b796", "#fff4d6"],
+        "background": "#050403",
+        "cmap_sequence": ["bone", "pink", "copper"],
     },
 }
 
@@ -73,11 +103,13 @@ def _build_particles(particle_count, seed):
     rng = np.random.default_rng(seed)
     return pd.DataFrame(
         {
-            "radius": rng.uniform(50, 250, particle_count),
-            "speed": rng.uniform(0.3, 2.0, particle_count),
+            "radius": rng.gamma(2.3, 52, particle_count).clip(24, 265),
+            "speed": rng.uniform(0.12, 0.95, particle_count),
             "phase": rng.uniform(0, math.tau, particle_count),
-            "size": rng.uniform(10, 80, particle_count),
+            "size": rng.uniform(8, 54, particle_count),
             "color_offset": rng.uniform(0, 5, particle_count),
+            "arm": rng.integers(0, 4, particle_count),
+            "drift": rng.uniform(-16, 16, particle_count),
         }
     )
 
@@ -130,10 +162,11 @@ def _render_frame(
     grid_y = np.linspace(0, height, 100)
     xx, yy = np.meshgrid(grid_x, grid_y)
     hue = np.sin(xx / width * math.pi + t * color_speed) * 0.5
-    hue += np.cos(yy / height * math.pi + t * 0.7) * 0.5
+    hue += np.cos(yy / height * math.pi + t * 0.7) * 0.35
+    hue += np.sin((xx + yy) / width * math.pi * 1.7 - t * 0.45) * 0.25
     hue = (hue - hue.min()) / max(0.001, hue.max() - hue.min())
     cmap_name = theme["cmap_sequence"][int((t * color_speed) / 2) % len(theme["cmap_sequence"])]
-    ax.imshow(hue, extent=[0, width, height, 0], cmap=cmap_name, alpha=0.4, interpolation="bilinear")
+    ax.imshow(hue, extent=[0, width, height, 0], cmap=cmap_name, alpha=0.34, interpolation="bilinear")
 
     x = np.linspace(0, width, 520)
     previous_wave = np.full_like(x, height)
@@ -163,10 +196,12 @@ def _render_frame(
     particle_size = []
     particle_color = []
     particle_edge = []
+    galaxy_tilt = 0.42
     for row in particles.itertuples(index=False):
-        angle = row.phase + t * row.speed
-        px = center_x + row.radius * math.cos(angle)
-        py = center_y + row.radius * math.sin(angle) * 0.4
+        spiral_angle = row.phase + row.radius * 0.018 + row.arm * math.tau / 4 + t * row.speed
+        breathing = 1 + 0.035 * math.sin(t * 1.6 + row.phase)
+        px = center_x + row.radius * breathing * math.cos(spiral_angle)
+        py = center_y + row.radius * breathing * math.sin(spiral_angle) * galaxy_tilt + row.drift
         for sx, sy in _symmetry_points(px, py, center_x, center_y, symmetry):
             particle_x.append(sx)
             particle_y.append(sy)
@@ -184,25 +219,34 @@ def _render_frame(
         linewidths=0.45,
     )
 
-    theta = np.linspace(0, math.tau, 220)
-    n = 3 + int(t / 2) % 5
-    pulse_scale = 1.5 if beat_mode == "pulse" and frame_index % max(1, fps) < 3 else 1.0
-    base_radius = 70 * pulse_scale
-    rotation = t * 0.5
-    radius = base_radius * (1 + morph_intensity * 0.3 * np.sin(n * theta + t * 1.5))
-    form_x = center_x + radius * np.cos(theta + rotation)
-    form_y = center_y + radius * np.sin(theta + rotation)
-    form_color = _color_at(colors, t * color_speed + 1.5)
-    for band in range(5, 0, -1):
-        band_scale = band / 5
-        band_color = _color_at(colors, t * color_speed + 1.5 + band * 0.38)
-        ax.fill(
-            center_x + (form_x - center_x) * band_scale,
-            center_y + (form_y - center_y) * band_scale,
-            color=band_color + (0.09 + band * 0.045,),
-            linewidth=0,
-        )
-    ax.plot(form_x, form_y, color=tuple(min(1, channel + 0.18) for channel in form_color), alpha=0.86, linewidth=1.6)
+    core_pulse = 1 + 0.12 * math.sin(t * 1.8)
+    if beat_mode == "pulse" and frame_index % max(1, fps) < 3:
+        core_pulse = 1.28
+    theta = np.linspace(0, 5.8 * math.pi, 520)
+    for arm in range(4):
+        arm_phase = arm * math.tau / 4 + t * 0.28
+        radius = np.linspace(12, 260 * core_pulse, theta.size)
+        arm_noise = morph_intensity * 10 * np.sin(theta * 1.7 + t * 1.2 + arm)
+        arm_x = center_x + (radius + arm_noise) * np.cos(theta + arm_phase)
+        arm_y = center_y + (radius + arm_noise) * np.sin(theta + arm_phase) * galaxy_tilt
+        arm_color = _color_at(colors, arm + t * color_speed * 0.45)
+        ax.plot(arm_x, arm_y, color=arm_color, alpha=0.24, linewidth=9.5)
+        ax.plot(arm_x, arm_y, color=tuple(min(1, channel + 0.14) for channel in arm_color), alpha=0.32, linewidth=2.2)
+
+    core_color = _color_at(colors, t * color_speed + 3.2)
+    for glow in range(6, 0, -1):
+        glow_size = (glow * 62 * core_pulse) ** 2 / 120
+        glow_alpha = 0.018 + (7 - glow) * 0.018
+        glow_color = _color_at(colors, t * color_speed + glow * 0.3)
+        ax.scatter([center_x], [center_y], s=glow_size, c=[glow_color + (glow_alpha,)], linewidths=0)
+    ax.scatter(
+        [center_x],
+        [center_y],
+        s=120 * core_pulse,
+        c=[tuple(min(1, channel + 0.2) for channel in core_color) + (0.78,)],
+        edgecolors=[core_color + (0.88,)],
+        linewidths=0.8,
+    )
 
     shimmer_x = np.arange(0, width, 28)
     shimmer_y = np.arange(0, height, 28)

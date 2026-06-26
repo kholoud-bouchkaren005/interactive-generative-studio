@@ -1,6 +1,6 @@
 # Interactive Generative Studio
 
-Interactive Generative Studio is a Flask web application for the ENSA Digital Creativity term project. It brings together generative art, data-driven visualization, image editing, interactive drawing, web integration, and a small machine-learning color extraction bonus.
+Interactive Generative Studio is a Flask web application for the ENSA Digital Creativity term project. It brings together generative art, real-time inspired animation, image editing, interactive drawing, web integration, and a small machine-learning color extraction bonus.
 
 ## Final Deliverables Checklist
 
@@ -11,7 +11,7 @@ Interactive Generative Studio is a Flask web application for the ENSA Digital Cr
 
 ## Team Members and Contributions
 
-- Nihal: Axe 1 - Generative Art, Axe 2 - Data-Driven Creative Visualization.
+- Nihal: Axe 1 - Generative Art, Axe 2 - Pulsar Generative Animation.
 - Kholoud: Axe 3 - Image Editing, Axe 5 - Web Integration.
 - Ghizlane: Axe 4 - Interactivity Module, Axe 6 - ML Color Extraction Bonus.
 
@@ -64,20 +64,24 @@ Main files:
 - `app/modules/generative_art/artworks.py`
 - `app/templates/generative.html`
 
-### Axe 2 - Data-Driven Creative Visualization
+### Axe 2 - Pulsar Generative Animation
 
 Routes:
 
 - `/axe2`
 - `/data-art`
 - `/generate-data-art`
+- `/download-pulsar`
 
 Features:
 
-- Builds a simulated weather dataset with Pandas.
-- Creates an abstract landscape visualization with Matplotlib.
-- Provides controls for dataset size, density, and visual theme.
-- Displays summary statistics and PNG download.
+- Generates animated GIF artwork with Matplotlib, NumPy, Pandas, and Pillow.
+- Creates a warm cosmic visual system inspired by galaxies, nebulae, ember fields, and orbital motion.
+- Uses layered rendering: nebula gradient field, breathing wave bands, spiral dust particles, galactic arms, glowing core, and shimmer texture.
+- Provides controls for theme, duration, FPS, wave layers, particle count, color speed, morph intensity, symmetry, and beat mode.
+- Includes multiple cinematic palettes, including warm amber, blue sapphire, refined gold, verdant green, ruby, amethyst, and soft pearl variants.
+- Shows render statistics including frame count, duration, FPS, particles, waves, symmetry, and file size.
+- Supports downloadable animated GIF export through `/download-pulsar`.
 
 Main files:
 
@@ -197,9 +201,9 @@ interactive-generative-studio/
 ## Tools Used
 
 - Flask and Jinja2 for web routing and templates.
-- Pillow for generative image rendering and image effects.
+- Pillow for generative image rendering, GIF assembly, and image effects.
 - Pandas and NumPy for data processing.
-- Matplotlib for artistic data visualization.
+- Matplotlib for generative animation frame rendering.
 - scikit-learn KMeans for ML color extraction.
 - HTML, CSS, and JavaScript for frontend interaction.
 
