@@ -1,30 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Axe 4 - Interactive Canvas</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body class="studio-page">
-    <header class="topbar">
-        <a class="brand" href="{{ url_for('home') }}">Interactive Generative Studio</a>
-        <nav class="nav-links">
-            <a href="{{ url_for('generative') }}">Axe 1</a>
-            <a href="{{ url_for('data_art') }}">Axe 2</a>
-            <a href="{{ url_for('image_audio_tools') }}">Axe 3</a>
-            <a href="{{ url_for('canvas') }}">Axe 4</a>
-            <a href="{{ url_for('ml_palette') }}">Axe 6</a>
-        </nav>
-    </header>
+{% extends "base.html" %}
 
-    <main class="workspace">
-        <section class="tool-panel">
-            <div class="panel-heading">
-                <p class="eyebrow">Axe 4</p>
-                <h1>Interactivity Module</h1>
-            </div>
+{% block title %}Canvas - Studio{% endblock %}
 
+{% block content %}
+<main class="module-page">
+    <section class="module-header shell">
+        <p class="breadcrumb">Studio / Canvas</p>
+        <h1>Canvas</h1>
+        <p>Draw, animate, and export in real time.</p>
+    </section>
+
+    <section class="workspace-grid shell canvas-workspace">
+        <aside class="control-panel canvas-controls">
             <label class="control-row" for="shapeType">
                 <span>Shape</span>
                 <select id="shapeType">
@@ -65,14 +52,11 @@
                 <button type="button" id="clearBtn">Clear</button>
                 <button type="button" id="downloadBtn">Download PNG</button>
             </div>
-        </section>
+        </aside>
 
-        <section class="canvas-stage">
+        <section class="output-panel canvas-stage">
             <canvas id="artCanvas" width="960" height="620"></canvas>
-            <p class="canvas-hint">Click or drag on the canvas to add shapes.</p>
         </section>
-    </main>
-
-    <script src="{{ url_for('static', filename='main.js') }}"></script>
-</body>
-</html>
+    </section>
+</main>
+{% endblock %}

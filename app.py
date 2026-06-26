@@ -19,34 +19,39 @@ app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
 MODULES = [
     {
-        "axe": "Axe 1",
-        "title": "Generative Art",
+        "key": "forma",
+        "icon": "F",
+        "title": "Forma",
         "route": "generative",
-        "description": "Procedural artworks built with loops, randomness, and OOP shapes.",
+        "description": "Procedural geometry, infinite compositions",
     },
     {
-        "axe": "Axe 2",
-        "title": "Data Art",
+        "key": "pulsar",
+        "icon": "P",
+        "title": "Pulsar",
         "route": "data_art",
-        "description": "Artistic visualizations generated from processed datasets.",
+        "description": "Weather rhythms turned into abstract landscapes",
     },
     {
-        "axe": "Axe 3",
-        "title": "Image Editing",
+        "key": "lens",
+        "icon": "L",
+        "title": "Lens",
         "route": "image_audio_tools",
-        "description": "Creative upload workflow for visual filters and transformations.",
+        "description": "Upload, transform, and download creative filters",
     },
     {
-        "axe": "Axe 4",
-        "title": "Interactive Canvas",
+        "key": "canvas",
+        "icon": "C",
+        "title": "Canvas",
         "route": "canvas",
-        "description": "Real-time drawing tools with sliders, palettes, and animation.",
+        "description": "Draw, animate, and export in real time",
     },
     {
-        "axe": "Axe 6",
-        "title": "ML Palette",
+        "key": "chroma",
+        "icon": "H",
+        "title": "Chroma",
         "route": "ml_palette",
-        "description": "Dominant color extraction with K-means clustering.",
+        "description": "Extract dominant colors with machine learning",
     },
 ]
 
@@ -193,40 +198,6 @@ def extract_palette_route():
 @app.route("/legacy-home")
 def legacy_home():
     return redirect(url_for("home"))
-
-
-
-@app.route("/axe2")
-@app.route("/data-art")
-def data_art():
-    return render_template(
-        "data_art.html",
-        themes=THEMES.keys(),
-        selected_theme="ocean",
-        days=45,
-        density=6,
-        artwork=None,
-        stats=None,
-    )
-
-
-@app.route("/generate-data-art", methods=["POST"])
-def generate_data_art_route():
-    days = int(request.form.get("days", 45))
-    density = int(request.form.get("density", 6))
-    theme = request.form.get("theme", "ocean")
-
-    artwork, stats = generate_data_art(days=days, theme_name=theme, density=density)
-
-    return render_template(
-        "data_art.html",
-        themes=THEMES.keys(),
-        selected_theme=theme,
-        days=days,
-        density=density,
-        artwork=artwork,
-        stats=stats,
-    )
 
 
 if __name__ == "__main__":

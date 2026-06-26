@@ -1,34 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ axe }} - {{ title }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body class="page">
-    <header class="topbar">
-        <a class="brand" href="{{ url_for('home') }}">Interactive Generative Studio</a>
-        <nav>
-            <a href="{{ url_for('generative') }}">Axe 1</a>
-            <a href="{{ url_for('data_art') }}">Axe 2</a>
-            <a href="{{ url_for('image_audio_tools') }}">Axe 3</a>
-            <a href="{{ url_for('canvas') }}">Axe 4</a>
-            <a href="{{ url_for('gallery') }}">Gallery</a>
-            <a href="{{ url_for('ml_palette') }}">Axe 6</a>
-        </nav>
-    </header>
+{% extends "base.html" %}
 
-    <main class="placeholder-shell">
-        <section class="placeholder-card">
-            <p class="eyebrow">{{ axe }}</p>
-            <h1>{{ title }}</h1>
-            <p class="lead">{{ description }}</p>
-            <p class="muted">
-                During final integration, replace this placeholder with the completed template, route logic, and module files from the corresponding branch.
-            </p>
-            <a class="primary-link" href="{{ url_for('home') }}">Back to dashboard</a>
-        </section>
-    </main>
-</body>
-</html>
+{% block title %}{{ title }} - Studio{% endblock %}
+
+{% block content %}
+<main class="module-page">
+    <section class="module-header shell">
+        <p class="breadcrumb">Studio / {{ title }}</p>
+        <h1>{{ title }}</h1>
+        <p>{{ description }}</p>
+    </section>
+</main>
+{% endblock %}
