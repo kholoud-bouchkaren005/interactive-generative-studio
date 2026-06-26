@@ -1,14 +1,15 @@
+import base64
 import os
 import sys
 
-from flask import Flask, jsonify, redirect, render_template, request, session, url_for
+from flask import Flask, Response, jsonify, redirect, render_template, request, session, url_for
 
 
 template_dir = os.path.abspath("app/templates")
 static_dir = os.path.abspath("app/static")
 sys.path.insert(0, os.path.abspath("app"))
 
-from modules.data_visualization.data_art import THEMES, generate_data_art
+from modules.data_visualization.data_art import ANIMATION_THEMES, generate_pulsar_animation
 from modules.generative_art.artworks import PALETTES, generate_artwork
 from modules.image_audio_processing.image_tools import apply_image_effect, image_to_base64, load_image_source
 from modules.ml_tools.color_extraction import extract_palette
@@ -34,7 +35,7 @@ MODULES = [
         "icon": "P",
         "title": "Pulsar",
         "route": "data_art",
-        "description": "Weather rhythms turned into abstract landscapes",
+        "description": "Living generative pulses exported as animated GIFs",
     },
     {
         "key": "lens",
@@ -105,31 +106,90 @@ def generate():
 def data_art():
     return render_template(
         "data_art.html",
-        themes=THEMES.keys(),
-        selected_theme="ocean",
-        days=45,
-        density=6,
-        artwork=None,
+        themes=list(ANIMATION_THEMES.keys()),
+        selected_theme="aurora",
+        duration=6,
+        fps=24,
+        wave_layers=5,
+        particle_count=80,
+        color_speed=1.0,
+        morph_intensity=1.0,
+        symmetry=1,
+        beat_mode="smooth",
+        animation=None,
         stats=None,
     )
 
 
 @app.route("/generate-data-art", methods=["POST"])
 def generate_data_art_route():
-    days = int(request.form.get("days", 45))
-    density = int(request.form.get("density", 6))
-    theme = request.form.get("theme", "ocean")
+    theme = request.form.get("theme", "aurora")
+    duration = int(request.form.get("duration", 6))
+    fps = int(request.form.get("fps", 24))
+    wave_layers = int(request.form.get("wave_layers", 5))
+    particle_count = int(request.form.get("particle_count", 80))
+    color_speed = float(request.form.get("color_speed", 1.0))
+    morph_intensity = float(request.form.get("morph_intensity", 1.0))
+    symmetry = int(request.form.get("symmetry", 1))
+    beat_mode = request.form.get("beat_mode", "smooth")
 
-    artwork, stats = generate_data_art(days=days, theme_name=theme, density=density)
+    gif_bytes, stats = generate_pulsar_animation(
+        theme_name=theme,
+        duration=duration,
+        fps=fps,
+        wave_layers=wave_layers,
+        particle_count=particle_count,
+        color_speed=color_speed,
+        morph_intensity=morph_intensity,
+        symmetry=symmetry,
+        beat_mode=beat_mode,
+    )
+    animation_b64 = base64.b64encode(gif_bytes).decode("ascii")
 
     return render_template(
         "data_art.html",
-        themes=THEMES.keys(),
+        themes=list(ANIMATION_THEMES.keys()),
         selected_theme=theme,
-        days=days,
-        density=density,
-        artwork=artwork,
+        duration=duration,
+        fps=fps,
+        wave_layers=wave_layers,
+        particle_count=particle_count,
+        color_speed=color_speed,
+        morph_intensity=morph_intensity,
+        symmetry=symmetry,
+        beat_mode=beat_mode,
+        animation=animation_b64,
         stats=stats,
+    )
+
+
+@app.route("/download-pulsar", methods=["POST"])
+def download_pulsar():
+    theme = request.form.get("theme", "aurora")
+    duration = int(request.form.get("duration", 6))
+    fps = int(request.form.get("fps", 24))
+    wave_layers = int(request.form.get("wave_layers", 5))
+    particle_count = int(request.form.get("particle_count", 80))
+    color_speed = float(request.form.get("color_speed", 1.0))
+    morph_intensity = float(request.form.get("morph_intensity", 1.0))
+    symmetry = int(request.form.get("symmetry", 1))
+    beat_mode = request.form.get("beat_mode", "smooth")
+
+    gif_bytes, _ = generate_pulsar_animation(
+        theme_name=theme,
+        duration=duration,
+        fps=fps,
+        wave_layers=wave_layers,
+        particle_count=particle_count,
+        color_speed=color_speed,
+        morph_intensity=morph_intensity,
+        symmetry=symmetry,
+        beat_mode=beat_mode,
+    )
+    return Response(
+        gif_bytes,
+        mimetype="image/gif",
+        headers={"Content-Disposition": f"attachment; filename=pulsar_{theme}.gif"},
     )
 
 
