@@ -1,78 +1,387 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Axe 1 - Generative Art</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body class="page">
-    <header class="topbar">
-        <a class="brand" href="{{ url_for('home') }}">Interactive Generative Studio</a>
-        <nav>
-            <a href="{{ url_for('generative') }}">Axe 1</a>
-        </nav>
-    </header>
+{% extends "base.html" %}
 
-    <main class="generator-layout">
-        <section class="panel">
-            <p class="eyebrow">Axe 1</p>
-            <h1>Generative Art</h1>
-            <p class="muted">Generate layered geometric art with random rules and OOP shape classes.</p>
+{% block title %}Forma - Studio{% endblock %}
 
-            <form action="{{ url_for('generate') }}" method="POST" class="controls">
-                <label>
-                    <span>Number of shapes <strong id="shapeCountValue">{{ shape_count }}</strong></span>
-                    <input type="range" id="shapeCount" name="shape_count" min="10" max="180" value="{{ shape_count }}" step="5">
-                </label>
+{% block content %}
+<style>
+    .forma-page {
+        min-height: 100vh;
+        padding: 64px clamp(18px, 4vw, 56px) 88px;
+        background:
+            radial-gradient(circle at 15% 8%, rgba(247, 37, 133, 0.16), transparent 28%),
+            radial-gradient(circle at 84% 16%, rgba(0, 245, 212, 0.12), transparent 24%),
+            var(--bg-primary);
+    }
 
-                <label>
-                    <span>Maximum size <strong id="sizeValue">{{ max_size }}</strong></span>
-                    <input type="range" id="maxSize" name="max_size" min="12" max="110" value="{{ max_size }}" step="2">
-                </label>
+    .forma-header {
+        max-width: 920px;
+        margin: 0 auto 34px;
+        text-align: center;
+    }
 
-                <label>
-                    <span>Palette</span>
-                    <select name="palette">
-                        {% for palette in palettes %}
-                            <option value="{{ palette }}" {% if palette == selected_palette %}selected{% endif %}>
-                                {{ palette|capitalize }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </label>
+    .forma-breadcrumb {
+        margin: 0 0 10px;
+        color: var(--text-muted);
+        font-size: 14px;
+        font-weight: 700;
+    }
 
-                <button type="submit">Generate artwork</button>
-            </form>
-        </section>
+    .forma-header h1 {
+        margin: 0;
+        color: #ffffff;
+        font-size: clamp(58px, 9vw, 132px);
+        line-height: 0.92;
+    }
 
-        <section class="art-stage">
-            {% if artwork %}
-                <img src="data:image/png;base64,{{ artwork }}" alt="Generated geometric artwork">
-                <a class="download-link" href="data:image/png;base64,{{ artwork }}" download="axe1-generative-art.png">
-                    Download PNG
-                </a>
-            {% else %}
-                <div class="empty-art">
-                    <p>Choose parameters and generate your first artwork.</p>
+    .forma-header p:last-child {
+        margin: 18px 0 0;
+        color: var(--text-muted);
+        font-size: clamp(17px, 2vw, 22px);
+    }
+
+    .forma-preview {
+        width: 100%;
+        min-height: 480px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        background: #0d0d0d;
+        box-shadow: 0 30px 100px rgba(0, 0, 0, 0.44);
+    }
+
+    .forma-preview img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: 480px;
+        object-fit: contain;
+        background: #0d0d0d;
+    }
+
+    .forma-idle {
+        position: relative;
+        display: grid;
+        place-items: center;
+        min-height: 480px;
+        isolation: isolate;
+        animation: pulse-bg 6s ease-in-out infinite;
+    }
+
+    .forma-idle::before,
+    .forma-idle::after {
+        content: "";
+        position: absolute;
+        inset: 12%;
+        z-index: -1;
+        background:
+            conic-gradient(from 30deg, #7c3aed, #f72585, #ff7a00, #f7d060, #00f5d4, #3a86ff, #7c3aed);
+        filter: blur(18px);
+        clip-path: polygon(50% 50%, 58% 0, 63% 44%, 100% 20%, 67% 57%, 98% 82%, 59% 66%, 50% 100%, 42% 66%, 2% 84%, 33% 57%, 0 18%, 38% 44%);
+        opacity: 0.88;
+        animation: blast-spin 12s linear infinite;
+    }
+
+    .forma-idle::after {
+        inset: 20%;
+        filter: blur(6px);
+        opacity: 0.68;
+        animation-direction: reverse;
+        animation-duration: 8s;
+    }
+
+    .forma-idle span {
+        max-width: 360px;
+        padding: 14px 20px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: var(--radius-pill);
+        color: rgba(255, 255, 255, 0.82);
+        background: rgba(13, 13, 13, 0.52);
+        backdrop-filter: blur(14px);
+        font-weight: 800;
+        text-align: center;
+    }
+
+    @keyframes pulse-bg {
+        0% { background: radial-gradient(ellipse at center, #7c3aed55 0%, #0d0d0d 70%); }
+        25% { background: radial-gradient(ellipse at center, #f72585aa 0%, #0d0d0d 70%); }
+        50% { background: radial-gradient(ellipse at center, #00f5d455 0%, #0d0d0d 70%); }
+        75% { background: radial-gradient(ellipse at center, #ff7a0055 0%, #0d0d0d 70%); }
+        100% { background: radial-gradient(ellipse at center, #7c3aed55 0%, #0d0d0d 70%); }
+    }
+
+    @keyframes blast-spin {
+        to { transform: rotate(360deg) scale(1.08); }
+    }
+
+    .forma-download-row {
+        display: flex;
+        justify-content: center;
+        margin: 18px 0 0;
+    }
+
+    .forma-download {
+        min-height: 46px;
+        border: 1px solid rgba(124, 58, 237, 0.74);
+        border-radius: var(--radius-pill);
+        padding: 0 24px;
+        color: #ffffff;
+        background: rgba(124, 58, 237, 0.12);
+        font-weight: 800;
+        cursor: pointer;
+        transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .forma-download:hover {
+        transform: translateY(-2px);
+        background: rgba(124, 58, 237, 0.22);
+        box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .forma-controls {
+        margin-top: 28px;
+        padding: 28px 40px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-card);
+        background: var(--bg-card);
+        box-shadow: 0 22px 70px rgba(0, 0, 0, 0.26);
+    }
+
+    .forma-form {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        justify-content: center;
+        gap: 24px 34px;
+    }
+
+    .forma-control {
+        display: grid;
+        gap: 10px;
+        min-width: 190px;
+    }
+
+    .forma-label {
+        color: var(--text-primary);
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    .forma-label strong {
+        color: var(--accent);
+    }
+
+    .forma-palettes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        min-width: min(100%, 392px);
+    }
+
+    .forma-palette {
+        display: grid;
+        justify-items: center;
+        gap: 7px;
+        cursor: pointer;
+    }
+
+    .forma-palette input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .palette-pill {
+        display: block;
+        width: 80px;
+        height: 36px;
+        border: 2px solid transparent;
+        border-radius: var(--radius-pill);
+        transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    }
+
+    .forma-palette input:checked + .palette-pill {
+        border-color: #ffffff;
+        box-shadow: 0 0 18px var(--accent-glow);
+        transform: translateY(-2px);
+    }
+
+    .forma-palette small {
+        color: var(--text-muted);
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .palette-aurora { background: linear-gradient(90deg, #3dd6d0, #8a5cf6, #f7d060, #ff7aa2); }
+    .palette-sunset { background: linear-gradient(90deg, #f72585, #ff7a00, #ffd166, #3a86ff); }
+    .palette-forest { background: linear-gradient(90deg, #2d6a4f, #40916c, #95d5b2, #d8f3dc); }
+    .palette-mono { background: linear-gradient(90deg, #111827, #374151, #6b7280, #f9fafb); }
+
+    .forma-slider {
+        width: min(260px, 70vw);
+        accent-color: var(--accent);
+    }
+
+    .forma-submit {
+        min-width: 180px;
+        min-height: 52px;
+        border: 0;
+        border-radius: var(--radius-pill);
+        color: #ffffff;
+        background: var(--accent);
+        font-weight: 900;
+        cursor: pointer;
+        transition: filter 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .forma-submit:hover {
+        filter: brightness(1.12);
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .forma-submit.is-loading {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        pointer-events: none;
+    }
+
+    .forma-spinner {
+        width: 18px;
+        height: 18px;
+        border: 3px solid rgba(255, 255, 255, 0.32);
+        border-top-color: #ffffff;
+        border-radius: 50%;
+        animation: forma-spin 700ms linear infinite;
+    }
+
+    @keyframes forma-spin {
+        to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 760px) {
+        .forma-page {
+            padding-inline: 16px;
+        }
+
+        .forma-preview,
+        .forma-preview img,
+        .forma-idle {
+            min-height: 360px;
+        }
+
+        .forma-controls {
+            padding: 22px;
+        }
+
+        .forma-form {
+            align-items: stretch;
+            justify-content: flex-start;
+        }
+
+        .forma-control,
+        .forma-slider,
+        .forma-submit {
+            width: 100%;
+        }
+    }
+</style>
+
+<main class="forma-page">
+    <section class="forma-header">
+        <p class="forma-breadcrumb">Studio / Forma</p>
+        <h1>Forma</h1>
+        <p>Procedural geometry. Infinite compositions.</p>
+    </section>
+
+    <section class="forma-preview" aria-label="Forma artwork preview">
+        {% if artwork %}
+            <img id="formaArtwork" src="data:image/png;base64,{{ artwork }}" alt="Generated Forma artwork">
+        {% else %}
+            <div class="forma-idle">
+                <span>Generate a radial color blast</span>
+            </div>
+        {% endif %}
+    </section>
+
+    {% if artwork %}
+        <div class="forma-download-row">
+            <button class="forma-download" type="button" data-download-target="formaArtwork" data-filename="forma-artwork.png">Download PNG</button>
+        </div>
+    {% endif %}
+
+    <section class="forma-controls" aria-label="Forma controls">
+        <form class="forma-form" action="/generate" method="POST" id="formaForm">
+            <input type="hidden" name="palette" id="paletteInput" value="{{ selected_palette }}">
+
+            <div class="forma-control">
+                <span class="forma-label">Palette</span>
+                <div class="forma-palettes">
+                    {% for palette in palettes %}
+                        <label class="forma-palette">
+                            <input type="radio" name="palette_choice" value="{{ palette }}" {% if palette == selected_palette %}checked{% endif %}>
+                            <span class="palette-pill palette-{{ palette }}" aria-hidden="true"></span>
+                            <small>{{ palette|capitalize }}</small>
+                        </label>
+                    {% endfor %}
                 </div>
-            {% endif %}
-        </section>
-    </main>
+            </div>
 
-    <script>
-        const shapeCount = document.getElementById("shapeCount");
-        const maxSize = document.getElementById("maxSize");
-        const shapeCountValue = document.getElementById("shapeCountValue");
-        const sizeValue = document.getElementById("sizeValue");
+            <label class="forma-control" for="shapeCount">
+                <span class="forma-label">Shapes <strong id="shapeCountValue">{{ shape_count }}</strong></span>
+                <input class="forma-slider" type="range" id="shapeCount" name="shape_count" min="10" max="180" value="{{ shape_count }}" step="5">
+            </label>
 
-        shapeCount.addEventListener("input", () => {
-            shapeCountValue.textContent = shapeCount.value;
+            <label class="forma-control" for="maxSize">
+                <span class="forma-label">Max Size <strong id="maxSizeValue">{{ max_size }}</strong></span>
+                <input class="forma-slider" type="range" id="maxSize" name="max_size" min="12" max="110" value="{{ max_size }}" step="2">
+            </label>
+
+            <button class="forma-submit" type="submit" id="formaSubmit">Generate</button>
+        </form>
+    </section>
+</main>
+
+<script>
+    const paletteInput = document.getElementById("paletteInput");
+    const paletteChoices = document.querySelectorAll("input[name='palette_choice']");
+    const shapeCount = document.getElementById("shapeCount");
+    const shapeCountValue = document.getElementById("shapeCountValue");
+    const maxSize = document.getElementById("maxSize");
+    const maxSizeValue = document.getElementById("maxSizeValue");
+    const formaForm = document.getElementById("formaForm");
+    const formaSubmit = document.getElementById("formaSubmit");
+
+    paletteChoices.forEach((choice) => {
+        choice.addEventListener("change", () => {
+            paletteInput.value = choice.value;
         });
+    });
 
-        maxSize.addEventListener("input", () => {
-            sizeValue.textContent = maxSize.value;
+    shapeCount.addEventListener("input", () => {
+        shapeCountValue.textContent = shapeCount.value;
+    });
+
+    maxSize.addEventListener("input", () => {
+        maxSizeValue.textContent = maxSize.value;
+    });
+
+    formaForm.addEventListener("submit", () => {
+        formaSubmit.classList.add("is-loading", "loading");
+        formaSubmit.innerHTML = '<span class="forma-spinner"></span><span>Generating...</span>';
+    });
+
+    document.querySelectorAll("[data-download-target]").forEach((button) => {
+        button.addEventListener("click", () => {
+            const image = document.getElementById(button.dataset.downloadTarget);
+            if (!image) return;
+
+            const link = document.createElement("a");
+            link.href = image.src;
+            link.download = button.dataset.filename;
+            link.click();
         });
-    </script>
-</body>
-</html>
+    });
+</script>
+{% endblock %}

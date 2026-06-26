@@ -1,42 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Generative Studio</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body class="page">
-    <header class="topbar">
-        <a class="brand" href="{{ url_for('home') }}">Interactive Generative Studio</a>
-        <nav>
-            <a href="{{ url_for('generative') }}">Axe 1</a>
-            <a href="{{ url_for('data_art') }}">Axe 2</a>
-            <a href="{{ url_for('image_audio_tools') }}">Axe 3</a>
-            <a href="{{ url_for('canvas') }}">Axe 4</a>
-            <a href="{{ url_for('gallery') }}">Gallery</a>
-            <a href="{{ url_for('ml_palette') }}">Axe 6</a>
-        </nav>
-    </header>
+{% extends "base.html" %}
 
-    <main class="home-shell">
-        <section class="intro">
-            <p class="eyebrow">Axe 5</p>
-            <h1>Web Integration & Flask Deployment</h1>
-            <p class="lead">
-                A unified Flask shell for the Interactive Generative Studio, ready for each team branch to plug in its module.
-            </p>
-        </section>
+{% block title %}Studio - Interactive Generative Studio{% endblock %}
 
-        <section class="module-grid" aria-label="Project modules">
+{% block content %}
+<main class="home-page">
+    <section class="hero">
+        <div class="particle-field" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="hero-inner shell">
+            <p class="eyebrow">Creative systems, made visual</p>
+            <h1 class="hero-title" data-typing="Create Without Limits">Create Without Limits</h1>
+            <p class="hero-copy">A creative platform for generative art, data visualization, image editing, and more.</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="#inside">Explore the Studio</a>
+                <a class="btn btn-outline" href="{{ url_for('gallery') }}">View Gallery</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="inside-section shell" id="inside">
+        <div class="section-heading">
+            <p class="eyebrow">What's Inside</p>
+            <h2>Five creation modes in one focused workspace</h2>
+        </div>
+
+        <div class="module-grid" aria-label="Studio modules">
             {% for module in modules %}
-                <a class="module-card" href="{{ url_for(module.route) }}">
-                    <span>{{ module.axe }}</span>
-                    <h2>{{ module.title }}</h2>
+                <a class="module-card module-card-{{ module.key }}" href="{{ url_for(module.route) }}">
+                    <span class="module-icon">{{ module.icon }}</span>
+                    <h3>{{ module.title }}</h3>
                     <p>{{ module.description }}</p>
+                    <strong>Open &rarr;</strong>
                 </a>
             {% endfor %}
-        </section>
-    </main>
-</body>
-</html>
+        </div>
+    </section>
+</main>
+{% endblock %}

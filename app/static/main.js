@@ -1,5 +1,59 @@
 const canvas = document.getElementById("artCanvas");
 
+document.documentElement.style.scrollBehavior = "smooth";
+
+document.querySelectorAll("input[type='range']").forEach((range) => {
+    const target = document.querySelector(`[data-range-value="${range.id}"]`);
+    if (!target) return;
+
+    range.addEventListener("input", () => {
+        target.textContent = range.value;
+    });
+});
+
+document.querySelectorAll("form").forEach((form) => {
+    form.addEventListener("submit", () => {
+        const button = form.querySelector("button[type='submit']");
+        if (!button || button.classList.contains("loading")) return;
+        button.dataset.originalText = button.textContent;
+        button.textContent = "";
+        button.classList.add("loading");
+    });
+});
+
+const heroTitle = document.querySelector("[data-typing]");
+
+if (heroTitle) {
+    const text = heroTitle.dataset.typing;
+    let index = 0;
+    heroTitle.textContent = "";
+
+    const typeNext = () => {
+        heroTitle.textContent = text.slice(0, index);
+        index += 1;
+        if (index <= text.length) {
+            window.setTimeout(typeNext, 54);
+        }
+    };
+
+    typeNext();
+}
+
+document.querySelectorAll("[data-preview-target]").forEach((input) => {
+    input.addEventListener("change", () => {
+        const target = document.getElementById(input.dataset.previewTarget);
+        const file = input.files[0];
+        if (!target || !file) return;
+
+        target.innerHTML = "";
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.alt = "Original image preview";
+        img.onload = () => URL.revokeObjectURL(img.src);
+        target.appendChild(img);
+    });
+});
+
 if (canvas) {
     const ctx = canvas.getContext("2d");
     const shapeType = document.getElementById("shapeType");
@@ -104,8 +158,8 @@ if (canvas) {
         ctx.clearRect(0, 0, width, height);
 
         const gradient = ctx.createLinearGradient(0, 0, width, height);
-        gradient.addColorStop(0, "#fbfbfb");
-        gradient.addColorStop(1, "#e9eef2");
+        gradient.addColorStop(0, "#111111");
+        gradient.addColorStop(1, "#1e1e2e");
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, width, height);
 
@@ -197,9 +251,11 @@ if (paletteForm) {
     const paletteMessage = document.getElementById("paletteMessage");
     const paletteResult = document.getElementById("paletteResult");
     const imagePreview = document.getElementById("imagePreview");
+    const paletteBar = document.getElementById("paletteBar");
 
     function showPreview(file) {
         imagePreview.innerHTML = "";
+        imagePreview.classList.remove("empty-preview");
         if (!file) return;
 
         const img = document.createElement("img");
@@ -211,6 +267,7 @@ if (paletteForm) {
 
     function renderPalette(colors) {
         paletteResult.innerHTML = "";
+        paletteBar.innerHTML = "";
         colors.forEach((color) => {
             const swatch = document.createElement("article");
             swatch.className = "palette-swatch";
@@ -218,10 +275,17 @@ if (paletteForm) {
                 <div class="swatch-color" style="background:${color.hex}"></div>
                 <div>
                     <strong>${color.hex}</strong>
-                    <span>RGB ${color.rgb.join(", ")} - ${color.percentage}%</span>
+                    <span>RGB ${color.rgb.join(", ")}</span>
+                    <span>${color.percentage}%</span>
                 </div>
             `;
             paletteResult.appendChild(swatch);
+
+            const segment = document.createElement("span");
+            segment.style.background = color.hex;
+            segment.style.width = `${color.percentage}%`;
+            segment.title = `${color.hex} ${color.percentage}%`;
+            paletteBar.appendChild(segment);
         });
     }
 
@@ -237,8 +301,10 @@ if (paletteForm) {
         event.preventDefault();
         paletteMessage.textContent = "Extracting colors...";
         paletteResult.innerHTML = "";
+        paletteBar.innerHTML = "";
 
         const formData = new FormData(paletteForm);
+        const button = paletteForm.querySelector("button[type='submit']");
         try {
             const response = await fetch("/extract-palette", {
                 method: "POST",
@@ -254,6 +320,11 @@ if (paletteForm) {
             paletteMessage.textContent = "Palette extracted with K-means clustering.";
         } catch (error) {
             paletteMessage.textContent = error.message;
+        } finally {
+            if (button) {
+                button.classList.remove("loading");
+                button.textContent = button.dataset.originalText || "Extract Palette";
+            }
         }
     });
 }
